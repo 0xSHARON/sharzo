@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SHARZO // Precision Android Mirroring & Cyber HUD</title>
+  <meta name="description" content="Ultra-low latency Android mirroring, audio forwarding, and precision control system for Windows. CLI Core & Cyberpunk HUD GUI.">
+  <link rel="icon" type="image/x-icon" href="icon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Space+Grotesk:wght@600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0c0e;
+      --bg-card: #131518;
+      --bg-card-alt: #1a1d22;
+      --accent: #dfff00;       /* Acid Lime */
+      --accent-dim: #b8d400;
+      --cyan: #00f0ff;         /* Electric Cyan */
+      --pink: #ff3366;         /* Warning Magenta */
+      --orange: #ff7700;       /* Hazard Orange */
+      --text: #f3f4f6;
+      --text-muted: #8b929e;
+      --border: 2px solid #272b33;
+      --border-accent: 2px solid #dfff00;
+      --shadow-raw: 5px 5px 0px #000000;
+      --shadow-accent: 5px 5px 0px #dfff00;
+      --shadow-cyan: 5px 5px 0px #00f0ff;
+      --font-display: 'Space Grotesk', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(rgba(223, 255, 0, 0.04) 1px, transparent 1px),
+        linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 32px 32px, 120px 120px;
+      color: var(--text);
+      font-family: var(--font-mono);
+      line-height: 1.5;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Selection & Scrollbar */
+    ::selection {
+      background: var(--accent);
+      color: #000;
+    }
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b0c0e;
+      border-left: 2px solid #272b33;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--accent);
+      border: 2px solid #000;
+    }
+
+    /* TOP MARQUEE TICKER */
+    .ticker-wrap {
+      width: 100%;
+      background: var(--accent);
+      color: #000;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      padding: 7px 0;
+      overflow: hidden;
+      white-space: nowrap;
+      border-bottom: 3px solid #000;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .ticker {
+      display: inline-block;
+      animation: ticker 30s linear infinite;
+    }
+    @keyframes ticker {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-50%, 0, 0); }
+    }
+
+    /* NAVBAR */
+    .navbar {
+      max-width: 1280px;
+      margin: 18px auto 0;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #fff;
+    }
+    .nav-brand img {
+      width: 44px;
+      height: 44px;
+      border: 2px solid var(--accent);
+      box-shadow: 3px 3px 0px #000;
+      background: #000;
+    }
+    .nav-brand-title {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .nav-brand-sub {
+      font-size: 0.65rem;
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+    }
+    .nav-links {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .nav-link {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 6px 12px;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+    }
+    .nav-link:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: rgba(223, 255, 0, 0.05);
+    }
+    .btn-brutal {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: var(--accent);
+      color: #000;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      border: 2px solid #000;
+      box-shadow: var(--shadow-raw);
+      cursor: pointer;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.15s ease;
+    }
+    .btn-brutal:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px #000;
+      background: #fff;
+    }
+    .btn-brutal:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px #000;
+    }
+    .btn-cyan {
+      background: var(--cyan);
+      color: #000;
+    }
+    .btn-outline {
+      background: transparent;
+      color: #fff;
+      border: 2px solid #fff;
+    }
+    .btn-outline:hover {
+      background: #fff;
+      color: #000;
+    }
+
+    /* CONTAINER */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+
+    /* HERO SECTION */
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 36px;
+      align-items: center;
+      margin-top: 24px;
+      padding-bottom: 60px;
+      border-bottom: 2px dashed #272b33;
+    }
+    .hero-tagline {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      background: rgba(223, 255, 0, 0.1);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 5vw, 4.4rem);
+      font-weight: 900;
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .hero-title span.accent {
+      color: var(--accent);
+      text-shadow: 3px 3px 0px rgba(0,0,0,0.8);
+      display: inline-block;
+      position: relative;
+    }
+    .hero-title span.cyan {
+      color: var(--cyan);
+    }
+    .hero-desc {
+      color: #a4abb8;
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 28px;
+      max-width: 620px;
+    }
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+    .hero-specs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .spec-box {
+      background: var(--bg-card);
+      border: 2px solid #22262d;
+      padding: 12px;
+      box-shadow: 3px 3px 0px #000;
+    }
+    .spec-box .label {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .spec-box .val {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--accent);
+      line-height: 1.1;
+      margin-top: 4px;
+    }
+
+    /* HERO PREVIEW CARD */
+    .hero-preview {
+      background: var(--bg-card);
+      border: 3px solid #000;
+      box-shadow: var(--shadow-accent);
+      overflow: hidden;
+      position: relative;
+    }
+    .window-header {
+      background: #000;
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #272b33;
+    }
+    .window-dots {
+      display: flex;
+      gap: 6px;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 0;
+      border: 1px solid #000;
+    }
+    .dot-red { background: var(--pink); }
+    .dot-yellow { background: var(--accent); }
+    .dot-green { background: #00ff88; }
+    .window-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+    .preview-img-container {
+      position: relative;
+      background: #000;
+      aspect-ratio: 16 / 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .preview-img-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .preview-img-container:hover img {
+      transform: scale(1.02);
+    }
+    .hud-overlay {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(0, 0, 0, 0.85);
+      border: 1px solid var(--accent);
+      padding: 6px 10px;
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      pointer-events: none;
+    }
+
+    /* SECTION TITLE */
+    .section-header {
+      margin: 60px 0 32px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      border-bottom: 2px solid #22262d;
+      padding-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+    .section-title span.slash {
+      color: var(--accent);
+      margin-right: 6px;
+    }
+    .section-badge {
+      font-size: 0.75rem;
+      background: #000;
+      border: 1px solid #333;
+      padding: 4px 8px;
+      color: var(--text-muted);
+    }
+
+    /* TWO FLAVORS (NORMAL CLI VS HUD GUI) */
+    .flavors-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .flavor-card {
+      background: var(--bg-card);
+      border: 3px solid #000;
+      box-shadow: var(--shadow-raw);
+      padding: 28px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+    .flavor-card:hover {
+      transform: translateY(-4px);
+    }
+    .flavor-card.cli {
+      border-color: #272b33;
+    }
+    .flavor-card.cli:hover {
+      border-color: var(--cyan);
+      box-shadow: var(--shadow-cyan);
+    }
+    .flavor-card.gui {
+      border-color: #272b33;
+    }
+    .flavor-card.gui:hover {
+      border-color: var(--accent);
+      box-shadow: var(--shadow-accent);
+    }
+    .flavor-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      border: 1px solid #000;
+    }
+    .flavor-badge.cli-badge {
+      background: var(--cyan);
+      color: #000;
+    }
+    .flavor-badge.gui-badge {
+      background: var(--accent);
+      color: #000;
+    }
+    .flavor-name {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 900;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+    .flavor-desc {
+      color: #9ea5b1;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .flavor-features {
+      list-style: none;
+      margin-bottom: 24px;
+    }
+    .flavor-features li {
+      font-size: 0.82rem;
+      padding: 6px 0;
+      border-bottom: 1px dashed #20242b;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .flavor-features li span.symbol {
+      color: var(--accent);
+      font-weight: 900;
+    }
+    .flavor-card.cli .flavor-features li span.symbol {
+      color: var(--cyan);
+    }
+    .flavor-img-thumb {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border: 2px solid #000;
+      margin-bottom: 20px;
+      background: #000;
+    }
+
+    /* INTERACTIVE COMMAND BUILDER */
+    .builder-panel {
+      background: #0f1013;
+      border: 3px solid #000;
+      box-shadow: var(--shadow-accent);
+      padding: 28px;
+      margin-top: 20px;
+    }
+    .builder-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+    .param-group {
+      background: #14161a;
+      border: 2px solid #23272e;
+      padding: 14px;
+    }
+    .param-label {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .pill-selector {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .pill {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 6px 10px;
+      background: #000;
+      color: var(--text-muted);
+      border: 1px solid #333;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.12s ease;
+    }
+    .pill:hover {
+      color: #fff;
+      border-color: #666;
+    }
+    .pill.active {
+      background: var(--accent);
+      color: #000;
+      font-weight: 800;
+      border-color: #000;
+      box-shadow: 2px 2px 0px #000;
+    }
+    .checkbox-param {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      padding: 4px 0;
+      user-select: none;
+    }
+    .checkbox-param input {
+      accent-color: var(--accent);
+      width: 16px;
+      height: 16px;
+    }
+
+    /* CLI OUTPUT BOX */
+    .cli-output-box {
+      background: #000;
+      border: 2px solid var(--accent);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: 4px 4px 0px rgba(223, 255, 0, 0.2);
+    }
+    .cli-cmd {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      color: #00ff88;
+      word-break: break-all;
+    }
+    .cli-cmd span.prompt {
+      color: var(--pink);
+      font-weight: 800;
+      user-select: none;
+    }
+
+    /* HOTKEY CHEAT SHEET */
+    .hotkey-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    .hotkey-item {
+      background: var(--bg-card);
+      border: 2px solid #23272e;
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 2px 2px 0px #000;
+    }
+    .key-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #000;
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 5px 10px;
+      box-shadow: 2px 2px 0px #000;
+      white-space: nowrap;
+    }
+    .key-action {
+      font-size: 0.82rem;
+      color: #c9ced8;
+      text-align: right;
+      font-weight: 500;
+    }
+
+    /* QUICK SETUP STEPS */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .step-card {
+      background: var(--bg-card);
+      border: 3px solid #000;
+      box-shadow: var(--shadow-raw);
+      padding: 24px;
+      position: relative;
+    }
+    .step-num {
+      position: absolute;
+      top: -14px;
+      left: 18px;
+      background: var(--accent);
+      color: #000;
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 900;
+      padding: 2px 10px;
+      border: 2px solid #000;
+      box-shadow: 2px 2px 0px #000;
+    }
+    .step-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin-top: 10px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+    .step-desc {
+      font-size: 0.82rem;
+      color: #9ba2af;
+      line-height: 1.6;
+    }
+    .step-code {
+      margin-top: 12px;
+      background: #000;
+      padding: 8px 12px;
+      font-size: 0.78rem;
+      color: var(--cyan);
+      border-left: 3px solid var(--cyan);
+      overflow-x: auto;
+    }
+
+    /* DOWNLOAD / GITHUB BANNER */
+    .dl-banner {
+      margin-top: 60px;
+      background: var(--accent);
+      color: #000;
+      border: 4px solid #000;
+      box-shadow: 8px 8px 0px #000;
+      padding: 48px 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+    .dl-content h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 3.5vw, 3rem);
+      font-weight: 900;
+      line-height: 1;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .dl-content p {
+      font-weight: 700;
+      font-size: 0.95rem;
+      max-width: 600px;
+    }
+    .dl-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .btn-black {
+      background: #000;
+      color: #fff;
+      border: 2px solid #000;
+    }
+    .btn-black:hover {
+      background: #fff;
+      color: #000;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 3px solid #000;
+      background: #08090a;
+      padding: 40px 20px 60px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .footer-links {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      transition: color 0.15s;
+    }
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+
+    /* TOAST NOTIFICATION */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--accent);
+      color: #000;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 800;
+      padding: 12px 20px;
+      border: 3px solid #000;
+      box-shadow: var(--shadow-raw);
+      transform: translateY(120%);
+      transition: transform 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+      z-index: 9999;
+      pointer-events: none;
+    }
+    #toast.show {
+      transform: translateY(0);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      .flavors-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-specs {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MARQUEE TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker">
+      ⚡ SHARZO PROTOCOL v1.0 WIN64 // ZERO BLOAT // ULTRA-LOW LATENCY <15MS // 120 FPS HIGH REFRESH READY // ELECTRON HUD + PURE CLI // AUDIO FORWARDING // OTG & WIRELESS // FREE & OPEN SOURCE // DEVELOPED BY KAJUKATLIii // ⚡ SHARZO PROTOCOL v1.0 WIN64 // ZERO BLOAT // ULTRA-LOW LATENCY <15MS // 120 FPS HIGH REFRESH READY // ELECTRON HUD + PURE CLI // AUDIO FORWARDING // OTG & WIRELESS // FREE & OPEN SOURCE // DEVELOPED BY KAJUKATLIii // 
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="#" class="nav-brand">
+      <img src="icon.png" alt="SHARZO Logo">
+      <div>
+        <div class="nav-brand-title">SHARZO</div>
+        <div class="nav-brand-sub">// ELITE ANDROID CONTROL</div>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="#flavors" class="nav-link">CORE VS HUD</a>
+      <a href="#builder" class="nav-link">COMMAND BUILDER</a>
+      <a href="#hotkeys" class="nav-link">HOTKEYS</a>
+      <a href="#setup" class="nav-link">SETUP</a>
+      <a href="https://github.com/0xSHARON/SHARZO" target="_blank" rel="noopener" class="btn-brutal btn-cyan">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        GITHUB REPO
+      </a>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-left">
+        <div class="hero-tagline">
+          <span>● SYSTEM READY</span>
+          <span>// WIN32 & WIN64 ENGINE</span>
+        </div>
+        <h1 class="hero-title">
+          PRECISION <span class="accent">MIRRORING.</span><br>
+          ZERO LATENCY.<br>
+          <span class="cyan">TOTAL CONTROL.</span>
+        </h1>
+        <p class="hero-desc">
+          SHARZO turns your Android device into a low-latency high-FPS extension of your Windows desktop. Direct USB 3.0 & Wi-Fi streaming, keyboard/mouse input injection, and audio forwarding built for streamers, gamers, and developers.
+        </p>
+
+        <div class="hero-cta">
+          <a href="#builder" class="btn-brutal">
+            ⚡ GENERATE LAUNCH COMMAND
+          </a>
+          <a href="https://github.com/0xSHARON/SHARZO" target="_blank" rel="noopener" class="btn-brutal btn-outline">
+            📦 CLONE & RUN (.EXE)
+          </a>
+          <a href="https://discord.gg/Vyq2hC6BuN" target="_blank" rel="noopener" class="btn-brutal" style="background:#5865F2; color:#fff; border-color:#000;">
+            💬 DISCORD COMMUNITY
+          </a>
+        </div>
+
+        <div class="hero-specs">
+          <div class="spec-box">
+            <div class="label">STREAM LATENCY</div>
+            <div class="val">&lt; 15MS</div>
+          </div>
+          <div class="spec-box">
+            <div class="label">REFRESH RATE</div>
+            <div class="val">120 FPS</div>
+          </div>
+          <div class="spec-box">
+            <div class="label">CPU OVERHEAD</div>
+            <div class="val">&lt; 1%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="hero-preview">
+          <div class="window-header">
+            <div class="window-dots">
+              <div class="dot dot-red"></div>
+              <div class="dot dot-yellow"></div>
+              <div class="dot dot-green"></div>
+            </div>
+            <div class="window-title">SHARZO_CYBER_HUD.EXE [CONNECTED]</div>
+            <div style="font-size:0.65rem; color:var(--accent); font-weight:800;">1080p @ 60FPS</div>
+          </div>
+          <div class="preview-img-container">
+            <img src="sharzohud.jpg" alt="SHARZO Cyber HUD Preview" id="heroPreviewImg">
+            <div class="hud-overlay">ADB: ONLINE // LOW BUFFER</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DUAL FLAVORS -->
+    <section id="flavors">
+      <div class="section-header">
+        <h2 class="section-title"><span class="slash">//</span> DUAL RUNTIME MODES</h2>
+        <div class="section-badge">PICK YOUR WORKFLOW</div>
+      </div>
+
+      <div class="flavors-grid">
+        <!-- NORMAL / CLI -->
+        <div class="flavor-card cli">
+          <div>
+            <span class="flavor-badge cli-badge">PURE CORE ENGINE</span>
+            <h3 class="flavor-name">SHARZO NORMAL (CLI)</h3>
+            <p class="flavor-desc">
+              Lightweight, blazing-fast standalone executable (<code>sharzo.exe</code>). Zero Electron memory footprint, instant startup, optimal for OBS Window Capture, custom batch scripts, and hardcore esports gaming.
+            </p>
+            <img src="sharzo.jpg" alt="SHARZO CLI Terminal Mode" class="flavor-img-thumb">
+            <ul class="flavor-features">
+              <li><span class="symbol">▶</span> Direct execution: <code>.\sharzo.exe</code></li>
+              <li><span class="symbol">▶</span> Zero RAM waste (&lt; 15MB active footprint)</li>
+              <li><span class="symbol">▶</span> Complete flag support: Bitrate, FPS, Codec, Dimensions</li>
+              <li><span class="symbol">▶</span> Includes pre-configured <code>open_a_terminal_here.bat</code></li>
+            </ul>
+          </div>
+          <a href="#builder" class="btn-brutal btn-cyan" style="width:100%;">
+            BUILD CLI COMMAND
+          </a>
+        </div>
+
+        <!-- HUD / GUI -->
+        <div class="flavor-card gui">
+          <div>
+            <span class="flavor-badge gui-badge">CYBERPUNK GUI</span>
+            <h3 class="flavor-name">SHARZO HUD (GUI)</h3>
+            <p class="flavor-desc">
+              Futuristic Electron-powered dashboard (<code>SHARZO HUD.exe</code>) designed for streamers and visual power users. Auto-detects ADB devices, scans installed apps for 1-click launch, and offers live sliders.
+            </p>
+            <img src="sharzohud.jpg" alt="SHARZO HUD GUI Mode" class="flavor-img-thumb">
+            <ul class="flavor-features">
+              <li><span class="symbol">▶</span> Interactive visual launcher & frameless dark UI</li>
+              <li><span class="symbol">▶</span> Automatic ADB device scanner & status monitor</li>
+              <li><span class="symbol">▶</span> 1-Click Android third-party app monkey launcher</li>
+              <li><span class="symbol">▶</span> Always-on-top pinned streaming assistant</li>
+            </ul>
+          </div>
+          <a href="https://github.com/0xSHARON/SHARZO" target="_blank" rel="noopener" class="btn-brutal" style="width:100%;">
+            LAUNCH HUD INTERFACE
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE COMMAND BUILDER -->
+    <section id="builder">
+      <div class="section-header">
+        <h2 class="section-title"><span class="slash">//</span> INTERACTIVE COMMAND GENERATOR</h2>
+        <div class="section-badge">LIVE SYNTAX BUILDER</div>
+      </div>
+
+      <div class="builder-panel">
+        <div class="builder-grid">
+          
+          <!-- Resolution -->
+          <div class="param-group">
+            <div class="param-label">
+              <span>MAX RESOLUTION</span>
+              <span id="resVal">1920p</span>
+            </div>
+            <div class="pill-selector" id="resSelector">
+              <div class="pill active" data-flag="-m 1920" data-label="1080p">1080p</div>
+              <div class="pill" data-flag="-m 1280" data-label="720p">720p</div>
+              <div class="pill" data-flag="-m 2560" data-label="1440p">1440p</div>
+              <div class="pill" data-flag="" data-label="Native">Native</div>
+            </div>
+          </div>
+
+          <!-- Max FPS -->
+          <div class="param-group">
+            <div class="param-label">
+              <span>REFRESH LIMIT</span>
+              <span id="fpsVal">60 FPS</span>
+            </div>
+            <div class="pill-selector" id="fpsSelector">
+              <div class="pill active" data-flag="--max-fps 60" data-label="60 FPS">60 FPS</div>
+              <div class="pill" data-flag="--max-fps 90" data-label="90 FPS">90 FPS</div>
+              <div class="pill" data-flag="--max-fps 120" data-label="120 FPS">120 FPS</div>
+              <div class="pill" data-flag="" data-label="Max">Unlimited</div>
+            </div>
+          </div>
+
+          <!-- Bitrate -->
+          <div class="param-group">
+            <div class="param-label">
+              <span>VIDEO BITRATE</span>
+              <span id="brVal">16 Mbps</span>
+            </div>
+            <div class="pill-selector" id="brSelector">
+              <div class="pill" data-flag="-b 8M" data-label="8M">8M</div>
+              <div class="pill active" data-flag="-b 16M" data-label="16M">16M</div>
+              <div class="pill" data-flag="-b 24M" data-label="24M">24M</div>
+              <div class="pill" data-flag="-b 32M" data-label="32M">32M</div>
+            </div>
+          </div>
+
+          <!-- Extra Flags -->
+          <div class="param-group">
+            <div class="param-label">TOGGLES & SWITCHES</div>
+            <label class="checkbox-param">
+              <input type="checkbox" id="chkScreenOff" checked>
+              <span>Turn phone screen off</span>
+            </label>
+            <label class="checkbox-param">
+              <input type="checkbox" id="chkStayAwake" checked>
+              <span>Keep device awake</span>
+            </label>
+            <label class="checkbox-param">
+              <input type="checkbox" id="chkNoAudio">
+              <span>Disable audio forward</span>
+            </label>
+            <label class="checkbox-param">
+              <input type="checkbox" id="chkFullscreen">
+              <span>Launch in Fullscreen</span>
+            </label>
+          </div>
+
+        </div>
+
+        <!-- CLI DISPLAY -->
+        <div class="cli-output-box">
+          <div class="cli-cmd">
+            <span class="prompt">PS&gt; </span><span id="commandOutput">.\sharzo.exe -m 1920 --max-fps 60 -b 16M --turn-screen-off --stay-awake</span>
+          </div>
+          <button class="btn-brutal" id="copyCmdBtn" style="padding:8px 14px; font-size:0.78rem;">
+            📋 COPY
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOTKEY CHEAT SHEET -->
+    <section id="hotkeys">
+      <div class="section-header">
+        <h2 class="section-title"><span class="slash">//</span> HARDWARE & HOTKEY MATRIX</h2>
+        <div class="section-badge">ALT = DEFAULT MOD KEY</div>
+      </div>
+
+      <div class="hotkey-grid">
+        <div class="hotkey-item">
+          <span class="key-badge">ALT + F</span>
+          <span class="key-action">Toggle Fullscreen</span>
+        </div>
+        <div class="hotkey-item">
+          <span class="key-badge">ALT + O</span>
+          <span class="key-action">Turn Phone Screen OFF</span>
+        </div>
+        <div class="hotkey-item">
+          <span class="key-badge">ALT + P</span>
+          <span class="key-action">Emulate Power Button</span>
+        </div>
+        <div class="hotkey-item">
+          <span class="key-badge">ALT + R</span>
+          <span class="key-action">Rotate Display 90°</span>
+        </div>
+        <div class="hotkey-item">
+          <span class="key-badge">ALT + H</span>
+          <span class="key-action">Press HOME Button</span>
+        </div>
+        <div class="hotkey-item">
+          <span class="key-badge">ALT + B</span>
+          <span class="key-action">Press BACK Button</span>
+        </div>
+        <div class="hotkey-item">
+          <span class="key-badge">ALT + S</span>
+          <span class="key-action">App Switcher (Overview)</span>
+        </div>
+        <div class="hotkey-item">
+          <span class="key-badge">ALT + N</span>
+          <span class="key-action">Expand Notification Shade</span>
+        </div>
+        <div class="hotkey-item">
+          <span class="key-badge">ALT + ↑ / ↓</span>
+          <span class="key-action">Volume Up / Down</span>
+        </div>
+        <div class="hotkey-item">
+          <span class="key-badge">CTRL + C / V</span>
+          <span class="key-action">Bidirectional Clipboard</span>
+        </div>
+        <div class="hotkey-item">
+          <span class="key-badge">DRAG & DROP</span>
+          <span class="key-action">Auto-Push File to /sdcard</span>
+        </div>
+        <div class="hotkey-item">
+          <span class="key-badge">DRAG .APK</span>
+          <span class="key-action">Auto-Install App to Device</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUICK SETUP -->
+    <section id="setup">
+      <div class="section-header">
+        <h2 class="section-title"><span class="slash">//</span> RAPID DEPLOYMENT</h2>
+        <div class="section-badge">4 STEPS TO DOMINANCE</div>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <h4 class="step-title">ENABLE USB DEBUG</h4>
+          <p class="step-desc">
+            Open Android <b>Settings &gt; About Phone</b>. Tap <b>Build Number</b> 7 times. Go to <b>Developer Options</b> and turn ON <b>USB Debugging</b>.
+          </p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <h4 class="step-title">PLUG IN DEVICE</h4>
+          <p class="step-desc">
+            Connect your phone to your PC via a USB cable. On your phone screen, tap <b>"Always allow from this computer"</b> when prompted.
+          </p>
+          <div class="step-code">.\adb.exe devices</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <h4 class="step-title">IGNITE SHARZO</h4>
+          <p class="step-desc">
+            Double-click <b>sharzo.exe</b> for instant mirroring or launch <b>SHARZO HUD.exe</b> for the visual dashboard.
+          </p>
+          <div class="step-code">.\sharzo.exe</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">04</div>
+          <h4 class="step-title">CAPTURE & PLAY</h4>
+          <p class="step-desc">
+            Your phone screen appears with zero latency. Add as an OBS Game/Window Capture source or control with your mouse & keyboard.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DOWNLOAD / BANNER -->
+    <section class="dl-banner">
+      <div class="dl-content">
+        <h2>GET SHARZO ON GITHUB</h2>
+        <p>100% Free, royalty-free, pre-bundled with ADB drivers, FFmpeg codecs, and dual execution runtimes.</p>
+      </div>
+      <div class="dl-actions">
+        <a href="https://github.com/0xSHARON/SHARZO" target="_blank" rel="noopener" class="btn-brutal btn-black">
+          ⭐ STAR & CLONE REPO
+        </a>
+        <a href="https://discord.gg/Vyq2hC6BuN" target="_blank" rel="noopener" class="btn-brutal btn-cyan">
+          JOIN DISCORD FOR PRESET PACKS
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <div style="font-weight:900; color:#fff; font-family:var(--font-display); font-size:1.1rem;">SHARZO PROTOCOL</div>
+        <div>Developed by <b>KAJUKATLIii</b> // Maintained by <b>0xSHARON</b></div>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/0xSHARON/SHARZO" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://discord.gg/Vyq2hC6BuN" target="_blank" rel="noopener">Discord</a>
+        <a href="LICENSE.md" target="_blank">EULA License</a>
+        <a href="README.md" target="_blank">Documentation</a>
+      </div>
+    </div>
+  </footer>
+
+  <div id="toast">COMMAND COPIED TO CLIPBOARD!</div>
+
+  <script>
+    // COMMAND BUILDER LOGIC
+    function updateCommand() {
+      const resPill = document.querySelector('#resSelector .pill.active');
+      const fpsPill = document.querySelector('#fpsSelector .pill.active');
+      const brPill = document.querySelector('#brSelector .pill.active');
+
+      const screenOff = document.getElementById('chkScreenOff').checked;
+      const stayAwake = document.getElementById('chkStayAwake').checked;
+      const noAudio = document.getElementById('chkNoAudio').checked;
+      const fullscreen = document.getElementById('chkFullscreen').checked;
+
+      let parts = ['.\\sharzo.exe'];
+
+      if (resPill && resPill.dataset.flag) parts.push(resPill.dataset.flag);
+      if (fpsPill && fpsPill.dataset.flag) parts.push(fpsPill.dataset.flag);
+      if (brPill && brPill.dataset.flag) parts.push(brPill.dataset.flag);
+
+      if (screenOff) parts.push('--turn-screen-off');
+      if (stayAwake) parts.push('--stay-awake');
+      if (noAudio) parts.push('--no-audio');
+      if (fullscreen) parts.push('-f');
+
+      const finalCmd = parts.join(' ');
+      document.getElementById('commandOutput').textContent = finalCmd;
+    }
+
+    // Pill event listeners
+    function bindPills(containerId, valDisplayId) {
+      const container = document.getElementById(containerId);
+      const pills = container.querySelectorAll('.pill');
+      pills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          pills.forEach(p => p.classList.remove('active'));
+          pill.classList.add('active');
+          if (valDisplayId) {
+            document.getElementById(valDisplayId).textContent = pill.dataset.label;
+          }
+          updateCommand();
+        });
+      });
+    }
+
+    bindPills('resSelector', 'resVal');
+    bindPills('fpsSelector', 'fpsVal');
+    bindPills('brSelector', 'brVal');
+
+    ['chkScreenOff', 'chkStayAwake', 'chkNoAudio', 'chkFullscreen'].forEach(id => {
+      document.getElementById(id).addEventListener('change', updateCommand);
+    });
+
+    // COPY BUTTON
+    const copyBtn = document.getElementById('copyCmdBtn');
+    const toast = document.getElementById('toast');
+    copyBtn.addEventListener('click', () => {
+      const cmdText = document.getElementById('commandOutput').textContent;
+      navigator.clipboard.writeText(cmdText).then(() => {
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2000);
+      });
+    });
+
+    updateCommand();
+  </script>
+</body>
+</html>
