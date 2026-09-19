@@ -1,0 +1,14 @@
+# Node modules
+node_modules/
+
+# Build outputs
+dist25/
+
+# Temp/output files
+gui/install_output.txt
+gui/out.txt
+
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store
