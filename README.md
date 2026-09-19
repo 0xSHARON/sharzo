@@ -13,7 +13,7 @@
 **Developed by KAJUKATLIii // Maintained by [0xSHARON](https://github.com/0xSHARON)**
 
 > [!IMPORTANT]
-> 🌐 **Official Website**: [https://0xsharon.github.io/sharzo/](https://0xsharon.github.io/sharzo/)
+> 🌐 **Live Website**: [https://0xsharon.github.io/sharzo/](https://0xsharon.github.io/sharzo/)
 > 
 > **FREE PREMIUM SUPPORT & THEMES**: Contact via Discord at **`kajukatli.`** or join [Our Community Discord](https://discord.gg/Vyq2hC6BuN).
 
@@ -29,152 +29,189 @@
 
 ## 🌟 Overview
 
-**SHARZO** is a high-performance Android mirroring, audio forwarding, and remote-control ecosystem for Windows. Designed specifically for professional streamers, competitive mobile gamers, content creators, and developers who demand zero bloat and sub-15ms latency.
+**SHARZO** is an ultra-low latency Android mirroring, audio forwarding, and remote-control workstation for Windows 10 & 11. Built for esports gamers, live streamers, content creators, and developers who demand zero bloat and sub-15ms latency.
 
-SHARZO comes equipped with two distinct runtime modes:
-1. **SHARZO Normal (CLI Core)** (`sharzo.exe`): Raw, zero-overhead executable. Uses `< 15MB` RAM, launches instantly, and is directly customizable with CLI flags.
-2. **SHARZO HUD (Cyberpunk GUI)** (`SHARZO HUD.exe`): Futuristic Electron-powered dashboard with real-time ADB device detection, third-party Android app launcher, preset toggles, and always-on-top mode.
-
----
-
-## 🚀 Key Features
-
-* ⚡ **Ultra-Low Latency**: Sub-15ms response time over USB 3.0 / USB 2.0 (Wi-Fi also supported).
-* 🎮 **120 FPS & High-Bitrate**: Stream smoothly at 60 / 90 / 120 FPS up to 32+ Mbps.
-* 🔊 **Seamless Audio Forwarding**: Forward Android system audio directly to your PC speakers/OBS.
-* 🖱️ **Full Mouse & Keyboard Control**: Direct input injection without needing root on the Android device.
-* 📋 **Bidirectional Clipboard**: Copy text seamlessly between Windows and your phone (`Ctrl + C` / `Ctrl + V`).
-* 📁 **Drag-and-Drop Installation**: Drag any `.apk` onto the window to install, or drag files to push them directly to `/sdcard/Download/`.
-* 🔋 **Screen-Off Mirroring**: Turn off the physical Android display while keeping the mirror active on your PC to prevent overheating and battery wear.
+SHARZO delivers two distinct execution modes:
+1. **SHARZO Normal (CLI Core)** (`sharzo.exe`): Raw, zero-overhead standalone binary. Launches in milliseconds, consumes `< 15MB` RAM, and offers full command-line flag customization.
+2. **SHARZO HUD (Cyberpunk GUI)** (`SHARZO HUD.exe`): Modern Electron-powered graphical HUD. Features automated ADB device scanning, one-click Android app launcher, resolution presets, and an always-on-top desktop widget mode.
 
 ---
 
-## 📋 System Requirements
+## 📦 Installation & Setup
 
-* **Operating System**: Windows 10 / 11 (64-bit).
-* **Android Device**: Android 5.0+ (Lollipop or higher) with **USB Debugging** enabled.
-* **Connectivity**: USB-C / Micro-USB cable (high-speed recommended) or shared 5GHz Wi-Fi.
-* **Drivers**: ADB drivers (pre-bundled with this distribution).
+### Step 1: Download / Clone the Repository
+Clone the repository using Git (or download the ZIP from GitHub):
+
+```powershell
+git clone https://github.com/0xSHARON/sharzo.git
+cd sharzo
+```
+
+*All ADB drivers, FFmpeg video decoders, SDL2 multimedia engines, and the compiled HUD GUI are pre-bundled — no external driver installations required.*
 
 ---
 
-## ⚡ Quick Start
+### Step 2: Prepare Your Android Device
 
-### 1. Enable Developer Options on Android
-1. Open **Settings** > **About Phone**.
-2. Tap **Build Number** 7 times until you see *"You are now a developer!"*.
-3. Go to **Settings** > **Developer Options** and enable **USB Debugging**.
+1. Open your Android phone's **Settings** > **About Phone**.
+2. Locate **Build Number** and tap it **7 times** until you see the notification: *"You are now a developer!"*.
+3. Go back to **Settings** > **System** (or **Additional Settings**) > **Developer Options**.
+4. Enable **USB Debugging** (toggle switch to ON).
+5. *(Optional for gaming)*: If available, enable **USB Debugging (Security Settings)** to allow full keyboard/mouse input injection.
 
-### 2. Connect Your Device
-1. Connect your Android device to your PC via USB cable.
-2. A prompt will appear on your phone: *"Allow USB debugging?"*. Check **"Always allow from this computer"** and tap **Allow**.
+---
 
-### 3. Launch SHARZO
+### Step 3: Connect to PC
 
-#### Option A: Run Normal CLI (Fastest & Lightest)
-Double-click **`sharzo.exe`** (or use `open_a_terminal_here.bat`). Your device screen will instantly appear!
+1. Plug your phone into your PC using a high-speed USB cable (USB 3.0 recommended).
+2. Unlock your phone screen. A prompt will appear:
+   > *"Allow USB debugging from this computer?"*
+3. Check the box: ☑ **"Always allow from this computer"** and tap **Allow / OK**.
+4. Verify connection by running in terminal:
+   ```powershell
+   .\adb.exe devices
+   ```
+   You should see your device ID with the status `device`.
 
-#### Option B: Run Cyberpunk HUD GUI
-Navigate to `gui/dist25/SHARZO HUD-win32-x64/` and run **`SHARZO HUD.exe`**.
-Select your device from the HUD, pick an app, and click **LAUNCH PROTOCOL**.
+---
+
+## 🚀 How to Run SHARZO
+
+You can run SHARZO using either the **Normal CLI** or the **HUD GUI**:
+
+### Mode 1: Run SHARZO Normal (CLI) — *Fastest & Pure Performance*
+
+* **Quick Launch**: Double-click **`sharzo.exe`** in the root folder.
+* **Terminal Launch**: Run **`open_a_terminal_here.bat`** or open PowerShell in the project directory:
+  ```powershell
+  .\sharzo.exe
+  ```
+* **High Refresh Gaming (120 FPS / 1080p / 16Mbps)**:
+  ```powershell
+  .\sharzo.exe -m 1920 --max-fps 120 -b 16M
+  ```
+* **Mirror with Phone Screen Turned OFF** *(Saves battery & prevents overheating)*:
+  ```powershell
+  .\sharzo.exe --turn-screen-off --stay-awake
+  ```
+* **Record Device Directly to Video**:
+  ```powershell
+  .\sharzo.exe --record gameplay.mp4
+  ```
+
+---
+
+### Mode 2: Run SHARZO HUD (Cyberpunk GUI) — *Visual Streamer Dashboard*
+
+1. Open the project folder and navigate to:
+   ```text
+   gui\dist25\SHARZO HUD-win32-x64\
+   ```
+2. Double-click **`SHARZO HUD.exe`**.
+3. **Using the HUD Dashboard**:
+   * **Device Detection**: Connected ADB devices appear automatically in the dropdown list.
+   * **App Launcher**: Scans third-party apps installed on your device. Select any game or app (e.g. Free Fire, PUBG, YouTube) and click to launch it directly on screen.
+   * **Preset Controls**: Configure resolution, framerate, and toggles with intuitive sliders.
+   * **Always-on-Top**: Toggle the pin icon to keep the HUD floating over your game or OBS streaming dashboard.
+   * Click **LAUNCH PROTOCOL** to start the mirror stream!
 
 ---
 
 ## ⌨️ Keyboard Shortcuts & Hotkeys
 
-All hotkeys use the **`Alt`** key by default as the modifier (`MOD`):
+All hotkeys use the **`Alt`** key by default as the modifier key (`MOD`):
 
-| Hotkey | Action |
+| Hotkey | Action Description |
 | :--- | :--- |
-| <kbd>Alt</kbd> + <kbd>F</kbd> | Toggle Fullscreen |
-| <kbd>Alt</kbd> + <kbd>O</kbd> | Turn phone screen **OFF** (PC mirror remains active) |
-| <kbd>Alt</kbd> + <kbd>P</kbd> | Emulate Power button (turn screen ON/OFF) |
-| <kbd>Alt</kbd> + <kbd>R</kbd> | Rotate screen 90° |
-| <kbd>Alt</kbd> + <kbd>H</kbd> | Press **HOME** button |
-| <kbd>Alt</kbd> + <kbd>B</kbd> | Press **BACK** button |
-| <kbd>Alt</kbd> + <kbd>S</kbd> | Press **APP SWITCHER** (Recent Apps) |
+| <kbd>Alt</kbd> + <kbd>F</kbd> | Toggle Fullscreen mode |
+| <kbd>Alt</kbd> + <kbd>O</kbd> | Turn phone physical screen **OFF** (PC mirror remains active) |
+| <kbd>Alt</kbd> + <kbd>P</kbd> | Emulate Hardware Power Button (turn screen ON/OFF) |
+| <kbd>Alt</kbd> + <kbd>R</kbd> | Rotate screen orientation 90° |
+| <kbd>Alt</kbd> + <kbd>H</kbd> | Emulate **HOME** button |
+| <kbd>Alt</kbd> + <kbd>B</kbd> | Emulate **BACK** button |
+| <kbd>Alt</kbd> + <kbd>S</kbd> | Emulate **APP SWITCHER** (Overview / Recent Tasks) |
 | <kbd>Alt</kbd> + <kbd>N</kbd> | Expand Android notification drawer |
-| <kbd>Alt</kbd> + <kbd>↑</kbd> / <kbd>↓</kbd> | Adjust Android volume up / down |
-| <kbd>Ctrl</kbd> + <kbd>C</kbd> / <kbd>V</kbd> | Synchronize clipboard between PC and phone |
-| **Drag & Drop .APK** | Instantly install Android APK to device |
-| **Drag & Drop File** | Push file to `/sdcard/Download/` |
+| <kbd>Alt</kbd> + <kbd>↑</kbd> / <kbd>↓</kbd> | Turn Android volume up / down |
+| <kbd>Ctrl</kbd> + <kbd>C</kbd> / <kbd>V</kbd> | Synchronize clipboard text bidirectionally between Windows and phone |
+| **Drag & Drop .APK** | Automatically install any Android `.apk` directly to phone |
+| **Drag & Drop File** | Push file instantly to phone's `/sdcard/Download/` storage |
 
 ---
 
-## 🛠️ CLI Command Cheat Sheet
-
-You can customize `sharzo.exe` with any standard flags:
+## 🛠️ CLI Flag Cheat Sheet
 
 ```powershell
 # Default launch
 .\sharzo.exe
 
-# 1080p limit at 60 FPS, 16 Mbps bitrate
-.\sharzo.exe -m 1920 --max-fps 60 -b 16M
+# Limit resolution to 1080p (preserves aspect ratio)
+.\sharzo.exe -m 1920
 
-# High-refresh esports mode (120 FPS, 24 Mbps)
-.\sharzo.exe --max-fps 120 -b 24M
+# Set custom bit rate (e.g. 16 Mbps)
+.\sharzo.exe -b 16M
 
-# Turn physical phone screen off during mirroring
-.\sharzo.exe --turn-screen-off --stay-awake
+# Lock frame rate (e.g. 60, 90, or 120 FPS)
+.\sharzo.exe --max-fps 120
 
-# Record screen session directly to an MP4 video
-.\sharzo.exe --record gameplay.mp4
+# Fullscreen start
+.\sharzo.exe -f
 
-# Target specific device (when multiple devices are connected)
+# Disable audio forwarding
+.\sharzo.exe --no-audio
+
+# Target a specific device (if multiple phones are plugged in)
 .\sharzo.exe -s <DEVICE_SERIAL>
 ```
 
 > [!TIP]
-> Use the interactive **[Command Generator on our Website](https://0xsharon.github.io/sharzo/)** to generate commands visually with one click!
+> Visit our **[Interactive Command Generator](https://0xsharon.github.io/sharzo/#generator)** to build your launch commands with one click!
 
 ---
 
 ## 📁 Repository Structure
 
 ```text
-SHARZO/
-├── index.html                   # Official Brutalist Landing Page (GitHub Pages)
-├── README.md                    # Project Documentation
-├── LICENSE.md                   # End-User License Agreement
-├── help.txt                     # Comprehensive CLI reference & flags
-├── sharzo.exe                   # Core standalone mirroring engine
-├── sharzo-server                # Android server agent
-├── adb.exe                      # Android Debug Bridge binary
-├── AdbWinApi.dll, AdbWinUsbApi  # Windows ADB communication drivers
-├── SDL2.dll                     # High-performance multimedia renderer
-├── avcodec-61.dll, avformat...  # FFmpeg video/audio decoding libraries
-├── icon.png, logo.png           # Visual branding assets
-├── open_a_terminal_here.bat     # Quick terminal launcher for Windows
+sharzo/
+├── index.html                           # Official Neo-Brutalist Website (GitHub Pages)
+├── README.md                            # Comprehensive Documentation & Setup Guide
+├── LICENSE.md                           # End-User License Agreement
+├── help.txt                             # Scrcpy core engine parameter reference
+├── sharzo.exe                           # Core standalone CLI mirroring engine
+├── sharzo-server                        # Android server agent binary
+├── adb.exe                              # Android Debug Bridge binary
+├── AdbWinApi.dll, AdbWinUsbApi.dll      # USB communication drivers
+├── SDL2.dll                             # Low-latency rendering library
+├── avcodec-61.dll, avformat-61.dll...   # Hardware FFmpeg decoders
+├── icon.png, logo.png, icon.ico         # Branding and application assets
+├── open_a_terminal_here.bat             # 1-click terminal launcher
 │
-└── gui/                         # Electron GUI Application
-    ├── package.json             # Electron configuration
-    ├── main.js                  # Electron main IPC process
-    ├── index.html               # HUD interface layout
+└── gui/                                 # SHARZO HUD GUI Application
     └── dist25/
         └── SHARZO HUD-win32-x64/
-            └── SHARZO HUD.exe   # Compiled standalone Cyber HUD GUI
+            └── SHARZO HUD.exe           # Standalone Cyberpunk HUD GUI (Electron win32-x64)
 ```
 
 ---
 
 ## ❓ Troubleshooting
 
-| Issue | Solution |
-| :--- | :--- |
-| **Device not detected** | Run `.\adb.exe devices` in terminal. Check USB cable and ensure **USB Debugging** is turned on. |
-| **"Device unauthorized"** | Unlock phone screen and look for the USB authorization pop-up. Check **"Always allow"** and accept. |
-| **Lag / Stutter** | Lower the bitrate and resolution: `.\sharzo.exe -m 1280 -b 8M --max-fps 60`. Connect to a USB 3.0 port. |
-| **No audio** | Audio forwarding requires **Android 11+**. On older devices, only video is mirrored. |
+| Issue | Likely Cause | Solution |
+| :--- | :--- | :--- |
+| **`device unauthorized`** | Phone hasn't accepted PC key | Unlock phone screen. Look for the *"Allow USB Debugging"* dialogue, check **"Always allow"**, and tap **OK**. |
+| **`no devices/emulators found`** | Cable or debugging issue | Reconnect USB cable. Ensure phone is in **File Transfer (MTP)** or **MIDI** mode, not "Charge only". Run `.\adb.exe devices`. |
+| **Lag or frame drops** | Slow USB port or high bitrate | Connect to a blue **USB 3.0** port. Lower bitrate: `.\sharzo.exe -m 1280 -b 8M --max-fps 60`. |
+| **No audio forwarded** | Android version limitation | System audio forwarding requires **Android 11 or higher**. On older versions, only video is mirrored. |
+| **Mouse clicks not registering** | Security restriction | On Xiaomi/MIUI/Oppo/Realme, enable **"USB Debugging (Security settings)"** inside Developer Options. |
 
 ---
 
 ## 🤝 Community & Support
 
 * **Website**: [0xsharon.github.io/sharzo](https://0xsharon.github.io/sharzo/)
-* **Discord**: [Join Our Community](https://discord.gg/Vyq2hC6BuN)
-* **GitHub**: [0xSHARON/sharzo](https://github.com/0xSHARON/sharzo)
-* **Lead Developer**: 0xSHARON
+* **Discord Community**: [Join Our Server](https://discord.gg/Vyq2hC6BuN)
+* **GitHub Repository**: [0xSHARON/sharzo](https://github.com/0xSHARON/sharzo)
+* **Original Engine**: KAJUKATLIii
+* **Maintainer**: [0xSHARON](https://github.com/0xSHARON)
 
 ---
 

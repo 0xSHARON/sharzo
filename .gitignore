@@ -1,14 +1,14 @@
 # Node modules
 node_modules/
 
-# Build outputs (exclude copy, keep main HUD build)
-gui/dist25/SHARZO HUD-win32-x64 - Copy/
-
-# Temp/output files
-gui/install_output.txt
-gui/out.txt
-
 # OS files
 Thumbs.db
 Desktop.ini
 .DS_Store
+
+# Ignore development / duplicate files in gui/ root, keep ONLY the compiled SHARZO HUD build
+gui/*
+!gui/dist25/
+gui/dist25/*
+!gui/dist25/SHARZO HUD-win32-x64/
+gui/dist25/SHARZO HUD-win32-x64 - Copy/
