@@ -5,15 +5,15 @@
 # 🛸 SHARZO
 ### Precision Control & Elite Mirroring for Android
 
-[![Website](https://img.shields.io/badge/Website-0xsharon.github.io%2FSHARZO-dfff00?style=for-the-badge&logo=googlechrome&logoColor=black)](https://0xsharon.github.io/SHARZO/)
+[![Website](https://img.shields.io/badge/Website-0xsharon.github.io%2Fsharzo-dfff00?style=for-the-badge&logo=googlechrome&logoColor=black)](https://0xsharon.github.io/sharzo/)
 [![License](https://img.shields.io/badge/License-EULA%20Freeware-00f0ff?style=for-the-badge)](LICENSE.md)
-[![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011%20x64-5865F2?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/0xSHARON/SHARZO)
+[![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011%20x64-5865F2?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/0xSHARON/sharzo)
 [![Discord](https://img.shields.io/badge/Community-Join%20Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/Vyq2hC6BuN)
 
 **Developed by KAJUKATLIii // Maintained by [0xSHARON](https://github.com/0xSHARON)**
 
 > [!IMPORTANT]
-> 🌐 **Official Website**: [https://0xsharon.github.io/SHARZO/](https://0xsharon.github.io/SHARZO/)
+> 🌐 **Official Website**: [https://0xsharon.github.io/sharzo/](https://0xsharon.github.io/sharzo/)
 > 
 > **FREE PREMIUM SUPPORT & THEMES**: Contact via Discord at **`kajukatli.`** or join [Our Community Discord](https://discord.gg/Vyq2hC6BuN).
 
@@ -126,7 +126,7 @@ You can customize `sharzo.exe` with any standard flags:
 ```
 
 > [!TIP]
-> Use the interactive **[Command Generator on our Website](https://0xsharon.github.io/SHARZO/)** to generate commands visually with one click!
+> Use the interactive **[Command Generator on our Website](https://0xsharon.github.io/sharzo/)** to generate commands visually with one click!
 
 ---
 
@@ -171,11 +171,10 @@ SHARZO/
 
 ## 🤝 Community & Support
 
-* **Website**: [0xsharon.github.io/SHARZO](https://0xsharon.github.io/SHARZO/)
+* **Website**: [0xsharon.github.io/sharzo](https://0xsharon.github.io/sharzo/)
 * **Discord**: [Join Our Community](https://discord.gg/Vyq2hC6BuN)
-* **GitHub**: [0xSHARON/SHARZO](https://github.com/0xSHARON/SHARZO)
-* **Lead Developer**: KAJUKATLIii
-* **Maintainer**: 0xSHARON
+* **GitHub**: [0xSHARON/sharzo](https://github.com/0xSHARON/sharzo)
+* **Lead Developer**: 0xSHARON
 
 ---
 
