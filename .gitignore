@@ -1,8 +1,8 @@
 # Node modules
 node_modules/
 
-# Build outputs
-dist25/
+# Build outputs (exclude copy, keep main HUD build)
+gui/dist25/SHARZO HUD-win32-x64 - Copy/
 
 # Temp/output files
 gui/install_output.txt

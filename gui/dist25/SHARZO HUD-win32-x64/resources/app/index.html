@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHARZO - Prestige HUD Interface</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #080808;
+            --prestige-red: #ff3c3c;
+            --prestige-red-glow: rgba(255, 60, 60, 0.4);
+            --pure-gold: #ffcc00;
+            --pure-gold-glow: rgba(255, 204, 0, 0.3);
+            --silver-accent: #c0c0c0;
+            --glass-bg: rgba(15, 5, 5, 0.9);
+            --neon-cyan: var(--prestige-red); /* Legacy mapping */
+            --neon-gold: var(--pure-gold);
+        }
+
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background-color: var(--bg-dark);
+            color: #e0e0e0;
+            overflow: hidden;
+            -webkit-app-region: drag;
+        }
+
+        .no-drag { -webkit-app-region: no-drag; }
+
+        /* Stable dist6 Border Style updated to Red/Gold with Tracers */
+        .hud-border {
+            position: relative;
+            border: 1px solid rgba(255, 60, 60, 0.2);
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            box-shadow: inset 0 0 30px rgba(255, 60, 60, 0.05);
+            overflow: hidden;
+        }
+
+        .hud-border::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--pure-gold), transparent);
+            animation: border-trace 5s linear infinite;
+            z-index: 5;
+        }
+
+        @keyframes border-trace {
+            0% { left: -100%; }
+            50% { left: 100%; }
+            100% { left: 100%; }
+        }
+
+        .hud-corner {
+            position: absolute; width: 15px; height: 15px;
+            border-color: var(--pure-gold); border-style: solid; z-index: 10;
+        }
+        .top-left { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+        .bottom-right { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+        .top-right { top: -1px; right: -1px; border-width: 2px 2px 0 0; opacity: 0.3; }
+        .bottom-left { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; opacity: 0.3; }
+
+        /* Hex stream styling */
+        #hex-stream {
+            font-size: 8px; color: rgba(255, 60, 60, 0.4);
+            line-height: 1.2; overflow: hidden; height: 100%;
+            pointer-events: none;
+        }
+
+        /* Prestige Button */
+        .launch-btn {
+            background: linear-gradient(45deg, transparent 5%, var(--prestige-red) 5%);
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-weight: 900;
+            transition: all 0.3s;
+            clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+            border: none;
+            cursor: pointer;
+        }
+
+        .launch-btn:hover {
+            background: linear-gradient(45deg, transparent 5%, var(--pure-gold) 5%);
+            box-shadow: 0 0 30px var(--pure-gold-glow);
+            transform: translateY(-2px);
+            color: #000;
+        }
+
+        /* Scan-sweep refined */
+        .scan-sweep {
+            position: relative;
+            overflow: hidden;
+        }
+        .scan-sweep::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(255, 204, 0, 0.1) 50%, transparent 100%);
+            transform: translateX(-100%);
+            animation: sweep-move 4s ease-in-out infinite;
+        }
+        @keyframes sweep-move {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Particles */
+        #particle-canvas {
+            position: absolute; inset: 0; z-index: 0; opacity: 0.3; pointer-events: none;
+        }
+
+        /* Boot Screen - Brand New Cinematic Reveal */
+        #boot-screen {
+            position: fixed; inset: 0; z-index: 9999;
+            background: radial-gradient(circle at center, #1a0505 0%, #000 100%);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 1s ease-out;
+        }
+
+        .boot-logo-container {
+            position: relative; width: 180px; height: 180px;
+            display: flex; justify-content: center; align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .boot-logo {
+            width: 100%; height: 100%; object-fit: contain;
+            animation: logo-reveal 2s ease-out forwards, logo-pulse 3s infinite;
+            filter: drop-shadow(0 0 20px var(--prestige-red-glow));
+        }
+
+        @keyframes logo-reveal {
+            0% { opacity: 0; transform: scale(0.8) rotate(-5deg); filter: brightness(0); }
+            100% { opacity: 1; transform: scale(1) rotate(0); filter: brightness(1); }
+        }
+
+        @keyframes logo-pulse {
+            0%, 100% { filter: drop-shadow(0 0 15px var(--prestige-red-glow)); }
+            50% { filter: drop-shadow(0 0 40px var(--prestige-red)); }
+        }
+
+        .status-dot {
+            height: 10px; width: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            background-color: #500;
+        }
+        .status-dot.active {
+            background-color: var(--prestige-red);
+            box-shadow: 0 0 10px var(--prestige-red);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 50% { opacity: 0.5; } }
+
+        select, input {
+            background: rgba(30, 0, 0, 0.6);
+            border: 1px solid var(--prestige-red);
+            color: #ffd700;
+            padding: 8px;
+            outline: none;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--prestige-red); }
+
+        /* Window Controls */
+        .window-controls {
+            position: absolute; top: 10px; right: 20px;
+            display: flex; gap: 15px; z-index: 10000;
+        }
+        .win-btn {
+            width: 12px; height: 12px; border-radius: 50%;
+            cursor: pointer; transition: all 0.2s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            -webkit-app-region: no-drag;
+        }
+        .win-close { background: #ff5f56; position: relative; }
+        .win-min { background: #ffbd2e; position: relative; }
+        .win-max { background: #27c93f; position: relative; }
+        .win-btn:hover { transform: scale(1.2); filter: brightness(1.2); }
+        .win-btn::after {
+            content: ''; position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.2s;
+            font-family: Arial, sans-serif; font-size: 8px; color: rgba(0,0,0,0.5); font-weight: bold;
+        }
+        .win-btn:hover::after { opacity: 1; }
+        .win-close::after { content: '×'; }
+        .win-min::after { content: '−'; }
+        .win-max::after { content: '▢'; }
+
+        /* Social Links */
+        .social-link {
+            font-size: 10px; font-weight: bold; cursor: pointer;
+            transition: all 0.3s; padding: 2px 8px; border: 1px solid transparent;
+            -webkit-app-region: no-drag; font-family: 'Share Tech Mono', monospace;
+        }
+        .social-link:hover {
+            color: white; border-color: var(--prestige-red);
+            box-shadow: 0 0 10px var(--prestige-red-glow);
+        }
+        .discord-btn { color: #5865F2; }
+        .github-btn { color: #888; }
+
+    </style>
+</head>
+<body class="h-screen w-screen flex flex-col items-center justify-center p-6 relative bg-black">
+    
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Boot Sequence -->
+    <div id="boot-screen" class="no-drag">
+        <div class="boot-logo-container">
+            <img src="./logo.png" alt="SHARZO" class="boot-logo" />
+        </div>
+        <div class="font-mono text-[10px] text-red-500/60 tracking-[0.4em] uppercase mb-1 animate-pulse">Initializing System Core...</div>
+        <div class="font-mono text-[8px] text-yellow-500/40 tracking-[0.2em] uppercase mb-4 italic">SHARZO // MADE BY KAJUKATLI</div>
+        <div id="boot-logs" class="text-[9px] font-mono w-[300px] h-20 overflow-hidden flex flex-col items-center gap-1"></div>
+
+        <div class="absolute bottom-10 w-48 h-[2px] bg-white/10 rounded-full overflow-hidden">
+            <div class="h-full bg-red-600 animate-[progress_3s_linear_infinite]" style="width: 50%"></div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div id="main-ui" style="opacity: 0" class="hud-border w-full h-full max-w-5xl p-8 flex flex-col gap-6 z-10 no-drag relative scan-sweep">
+        <div class="hud-corner top-left"></div>
+        <div class="hud-corner bottom-right"></div>
+        <div class="hud-corner top-right"></div>
+        <div class="hud-corner bottom-left"></div>
+        
+        <div class="window-controls no-drag">
+            <div class="win-btn win-min" onclick="ipcRenderer.send('window-minimize')"></div>
+            <div class="win-btn win-max" onclick="ipcRenderer.send('window-maximize')"></div>
+            <div class="win-btn win-close" onclick="ipcRenderer.send('window-close')"></div>
+        </div>
+
+        <!-- Header -->
+        <header class="flex justify-between items-start border-b border-red-900/40 pb-6">
+            <div class="flex items-center gap-6">
+                <div class="relative group cursor-pointer no-drag">
+                    <img src="./logo.png" alt="Logo" class="w-16 h-16 object-contain transition-transform duration-500 group-hover:scale-125 group-hover:rotate-12" style="filter: drop-shadow(0 0 15px var(--prestige-red-glow));" />
+                    <div class="absolute inset-0 bg-red-500/20 blur-xl scale-0 group-hover:scale-150 transition-transform duration-700 rounded-full"></div>
+                </div>
+                <div>
+                    <h1 class="text-5xl font-black tracking-[0.2em] text-white italic" style="text-shadow: 0 0 20px var(--prestige-red-glow);">SHARZO</h1>
+                    <div class="flex items-center gap-2">
+                        <div class="h-[2px] w-8 bg-red-600 animate-pulse"></div>
+                        <p class="text-[10px] text-yellow-500/80 uppercase tracking-[0.3em]">Advanced Screen Protocol // Prestige v2.0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-col items-end gap-2">
+                <div class="flex items-center gap-3 text-red-500 text-xs font-bold tracking-widest">
+                    <span id="system-status">LINK_OFFLINE</span>
+                    <span class="status-dot" id="status-indicator"></span>
+                </div>
+                <div class="flex gap-4 mb-1 no-drag">
+                    <div class="social-link discord-btn" onclick="ipcRenderer.send('open-url', 'https://discord.gg/yPBCT2czWC')">COMMUNITY // DISCORD</div>
+                    <div class="social-link github-btn" onclick="ipcRenderer.send('open-url', 'https://github.com/KAJUKATLIii/SHARZO')">SOURCE // GITHUB</div>
+                </div>
+                <div id="live-clock" class="text-[10px] text-gray-600 font-mono">00:00:00:00</div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <div class="flex-1 flex gap-8 mt-2 overflow-hidden">
+            
+            <!-- Main Control Center: Now Full Width -->
+            <div class="flex-1 flex flex-col gap-6 no-drag">
+                <div class="flex-1 flex gap-8">
+                    <!-- Left: Selection -->
+                    <div class="w-1/2 flex flex-col gap-6">
+                        <div class="hud-border p-5 flex-1 flex flex-col bg-opacity-10 no-drag">
+                            <h2 class="text-red-500 border-b border-red-900/30 pb-2 mb-6 uppercase text-xs font-bold tracking-[0.2em]">Target System</h2>
+                            
+                            <label class="text-[10px] text-gray-500 uppercase mb-1">Detected Nodes</label>
+                            <select id="device-select" class="w-full mb-6 text-xs uppercase tracking-widest bg-black border border-red-900 text-yellow-500 p-2">
+                                <option value="">SCANNING TERMINALS...</option>
+                            </select>
+                            
+                            <label class="text-[10px] text-gray-500 uppercase mb-1">Injection Module</label>
+                            <div class="relative w-full mb-6 text-xs font-sans" id="app-dropdown-container">
+                                <div id="app-dropdown-btn" class="w-full p-2.5 bg-black border border-red-900 text-yellow-500 cursor-pointer flex justify-between items-center hover:border-yellow-500 transition-all uppercase tracking-widest rounded-sm shadow-[0_0_10px_rgba(255,0,0,0.1)]">
+                                    <div class="flex items-center gap-2 truncate" id="app-dropdown-selected">
+                                        <span>PURE MIRROR</span>
+                                    </div>
+                                    <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </div>
+                                <div id="app-dropdown-menu" class="absolute left-0 right-0 top-full mt-1 bg-black border border-red-500 max-h-48 overflow-y-auto hidden z-50 hud-border flex-col custom-scrollbar"></div>
+                            </div>
+                            
+                            <button id="refresh-btn" class="border border-red-900 text-red-500 hover:bg-red-900/30 p-2 text-[10px] uppercase tracking-[0.2em] transition-all">
+                                Force Manual Scan
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: Config -->
+                    <div class="w-1/2 flex flex-col gap-6 no-drag">
+                        <div class="hud-border p-6 flex-1 overflow-y-auto bg-opacity-10 custom-scrollbar">
+                            <h2 class="text-red-500 border-b border-red-900/30 pb-2 mb-6 uppercase text-xs font-bold tracking-[0.2em]">Video Matrix</h2>
+                            
+                            <div class="grid grid-cols-1 gap-6 text-[10px] uppercase tracking-widest">
+                                <div>
+                                    <label class="text-gray-500 block mb-2">Bitrate Cap</label>
+                                    <select id="bitrate" class="w-full bg-black border border-red-900 text-white p-2">
+                                        <option value="8M">08 Mbps (Norm)</option>
+                                        <option value="16M">16 Mbps (High)</option>
+                                        <option value="24M">24 Mbps (Extreme)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-gray-500 block mb-2">Frame Limit</label>
+                                    <select id="fps" class="w-full bg-black border border-red-900 text-white p-2">
+                                        <option value="60">60 FPS</option>
+                                        <option value="120">120 FPS</option>
+                                        <option value="30">30 FPS</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-gray-500 block mb-2">Scale Res</label>
+                                    <select id="resolution" class="w-full bg-black border border-red-900 text-white p-2">
+                                        <option value="">Auto Sync</option>
+                                        <option value="1920">1080p Fix</option>
+                                        <option value="1280">720p Fix</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <h2 class="text-red-500 border-b border-red-900/30 pb-2 mb-4 uppercase text-xs font-bold tracking-[0.2em] mt-8">Directives</h2>
+                            <div class="space-y-4 text-[10px] uppercase tracking-widest text-gray-400">
+                                <label class="flex items-center gap-4 cursor-pointer group">
+                                    <input type="checkbox" id="always-on-top" class="hidden peer">
+                                    <div class="w-4 h-4 border border-red-900 bg-black peer-checked:bg-red-500 shadow-[inset_0_0_5px_rgba(0,0,0,1)]"></div>
+                                    <span class="group-hover:text-red-400">Stay Focused</span>
+                                </label>
+                                <label class="flex items-center gap-4 cursor-pointer group">
+                                    <input type="checkbox" id="turn-screen-off" class="hidden peer" checked>
+                                    <div class="w-4 h-4 border border-red-900 bg-black peer-checked:bg-red-500 shadow-[inset_0_0_5px_rgba(0,0,0,1)]"></div>
+                                    <span class="group-hover:text-red-400">Hide Target Screen</span>
+                                </label>
+                                <label class="flex items-center gap-4 cursor-pointer group">
+                                    <input type="checkbox" id="stay-awake" class="hidden peer" checked>
+                                    <div class="w-4 h-4 border border-red-900 bg-black peer-checked:bg-red-500 shadow-[inset_0_0_5px_rgba(0,0,0,1)]"></div>
+                                    <span class="group-hover:text-red-400">Pulse Anti-Sleep</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+        <!-- Footer -->
+        <footer class="mt-4 border-t border-red-900/40 pt-6 flex justify-between items-center">
+            <div class="text-[10px] font-mono text-red-500/60 uppercase">
+                <span id="log-output">System Standby...</span>
+            </div>
+            <button id="launch-btn" class="launch-btn px-16 py-5 font-black text-xl shadow-[0_0_20px_rgba(255,0,0,0.2)]">
+                IGNITE PROTOCOL
+            </button>
+        </footer>
+    </div>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+
+        window.onload = () => {
+            const bootScreen = document.getElementById('boot-screen');
+            const mainUi = document.getElementById('main-ui');
+            const bootLogs = document.getElementById('boot-logs');
+            
+            // Audio Synthesis (Base64 Beeps)
+            const playSound = (type) => {
+                try {
+                    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain); gain.connect(ctx.destination);
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(type === 'boot' ? 880 : 440, ctx.currentTime);
+                    gain.gain.setValueAtTime(0.02, ctx.currentTime);
+                    osc.start(); osc.stop(ctx.currentTime + 0.05);
+                } catch(e) {}
+            };
+
+            let logs = [
+                "DRV_INIT: SEARCHING FOR ADB HANDLES",
+                "SEC_AUTH: CHALLENGE_RESPONSE_OK",
+                "MEM_MAP: ALLOCATING VIDEO_BUFFERS",
+                "CORE_UP: ALL SYSTEMS OPTIMAL"
+            ];
+            let i = 0;
+            const logInt = setInterval(() => {
+                if(i < logs.length) {
+                    const l = document.createElement('div');
+                    l.className = "flex items-center gap-2 fade-in";
+                    l.innerHTML = `<span class="text-red-600 font-bold">[OK]</span> ${logs[i]}`;
+                    bootLogs.appendChild(l);
+                    playSound('boot');
+                    i++;
+                } else {
+                    clearInterval(logInt);
+                    setTimeout(() => {
+                        bootScreen.style.opacity = '0';
+                        setTimeout(() => {
+                            bootScreen.style.display = 'none';
+                            mainUi.style.opacity = '1';
+                        }, 1000);
+                    }, 500);
+                }
+            }, 600);
+
+            // Particles with mouse reaction
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            let particles = [];
+            let mouse = { x: -100, y: -100 };
+
+            window.addEventListener('mousemove', (e) => { mouse.x = e.x; mouse.y = e.y; });
+            for(let j=0; j<60; j++) particles.push({
+                x: Math.random()*canvas.width, 
+                y: Math.random()*canvas.height, 
+                s: Math.random()*1.5 + 0.5, 
+                vx: Math.random()*0.3-0.15, 
+                vy: Math.random()*0.3-0.15
+            });
+
+            function animate() {
+                ctx.clearRect(0,0,canvas.width, canvas.height);
+                ctx.fillStyle = 'rgba(255, 60, 60, 0.2)';
+                particles.forEach(p => {
+                    let dx = mouse.x - p.x;
+                    let dy = mouse.y - p.y;
+                    let dist = Math.sqrt(dx*dx + dy*dy);
+                    if(dist < 100) {
+                        p.x -= dx * 0.01;
+                        p.y -= dy * 0.01;
+                    }
+                    p.x += p.vx; p.y += p.vy;
+                    if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                    if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
+                    ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); ctx.fill();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+
+            // Interaction Sound
+            document.querySelectorAll('button, select, input').forEach(el => {
+                el.addEventListener('click', () => playSound('click'));
+            });
+
+            // Clock
+            setInterval(() => {
+                const clock = document.getElementById('live-clock');
+                if(clock) {
+                    const d = new Date();
+                    clock.innerText = d.toISOString().split('T')[1].replace('Z','');
+                }
+            }, 100);
+        };
+
+        const deviceSelect = document.getElementById('device-select');
+        const refreshBtn = document.getElementById('refresh-btn');
+        const launchBtn = document.getElementById('launch-btn');
+        const statusInd = document.getElementById('status-indicator');
+        const sysStatus = document.getElementById('system-status');
+        const logOutput = document.getElementById('log-output');
+
+        let selectedApp = "";
+        const appBtn = document.getElementById('app-dropdown-btn');
+        const appMenu = document.getElementById('app-dropdown-menu');
+        const appSelected = document.getElementById('app-dropdown-selected');
+        
+        appBtn.addEventListener('click', () => appMenu.classList.toggle('hidden'));
+        document.addEventListener('click', (e) => {
+            if (!document.getElementById('app-dropdown-container').contains(e.target)) appMenu.classList.add('hidden');
+        });
+
+        document.getElementById('always-on-top').addEventListener('change', (e) => {
+            ipcRenderer.send('set-always-on-top', e.target.checked);
+        });
+
+        let previousDevices = [];
+        function setPlaceholderApp(text) {
+            appSelected.innerHTML = `<span class="truncate">${text}</span>`;
+            appMenu.innerHTML = '';
+        }
+
+        function fetchDevices() { ipcRenderer.send('get-devices'); }
+        ipcRenderer.on('devices-list', (event, devices) => {
+            if (JSON.stringify(previousDevices) === JSON.stringify(devices)) return;
+            previousDevices = devices;
+            deviceSelect.innerHTML = '';
+            if (devices.length === 0) {
+                deviceSelect.innerHTML = '<option value="">NO TARGETS FOUND</option>';
+                statusInd.classList.remove('active');
+                sysStatus.innerText = "LINK_OFFLINE";
+                logOutput.innerText = "No nodes detected.";
+                setPlaceholderApp("STRICT MIRROR");
+            } else {
+                devices.forEach(d => {
+                    const opt = document.createElement('option');
+                    opt.value = d; opt.innerText = d; deviceSelect.appendChild(opt);
+                });
+                statusInd.classList.add('active');
+                sysStatus.innerText = "LINK_ACTIVE";
+                logOutput.innerText = `${devices.length} nodes locked.`;
+                if (devices.length > 0) {
+                    ipcRenderer.send('get-apps', devices[0]);
+                    setPlaceholderApp("FETCHING PACKAGES...");
+                }
+            }
+        });
+
+        deviceSelect.addEventListener('change', () => {
+            if(deviceSelect.value) {
+                setPlaceholderApp("FETCHING PACKAGES...");
+                ipcRenderer.send('get-apps', deviceSelect.value);
+            } else {
+                setPlaceholderApp("STRICT MIRROR");
+                selectedApp = "";
+            }
+        });
+
+        ipcRenderer.on('apps-list', (event, apps) => {
+            appMenu.innerHTML = '';
+            const defaultOpt = document.createElement('div');
+            defaultOpt.className = "p-3 hover:bg-red-900/50 cursor-pointer border-b border-red-900/20 text-gray-400";
+            defaultOpt.innerText = "NONE (STRICT MIRROR)";
+            defaultOpt.onclick = () => {
+                selectedApp = "";
+                appSelected.innerHTML = `<span>STRICT MIRROR</span>`;
+                appMenu.classList.add('hidden');
+            };
+            appMenu.appendChild(defaultOpt);
+
+            apps.sort().forEach(pkg => {
+                const opt = document.createElement('div');
+                opt.className = "p-2 hover:bg-red-900/60 cursor-pointer border-b border-red-900/10 transition-colors text-xs truncate";
+                opt.innerText = pkg;
+                opt.onclick = () => {
+                    selectedApp = pkg;
+                    appSelected.innerHTML = `<span class="truncate text-yellow-500 font-bold">${pkg}</span>`;
+                    appMenu.classList.add('hidden');
+                };
+                appMenu.appendChild(opt);
+            });
+            selectedApp = "";
+            appSelected.innerHTML = `<span>SELECT PAYLOAD (OPTIONAL)</span>`;
+        });
+
+        ipcRenderer.on('launch-status', (event, data) => {
+            if(data.status === 'success') {
+                logOutput.innerText = "Video stream active.";
+                launchBtn.innerText = "STOP PROTOCOL";
+                launchBtn.classList.add('bg-red-800');
+                launchBtn.onclick = () => {
+                    ipcRenderer.send('stop-sharzo');
+                };
+            } else if (data.status === 'stopped') {
+                logOutput.innerText = "System Standby...";
+                launchBtn.innerText = "IGNITE PROTOCOL";
+                launchBtn.classList.remove('bg-red-800');
+                initMainLaunchLogic();
+            } else {
+                logOutput.innerText = "ERR: " + data.message;
+                launchBtn.innerText = "IGNITE PROTOCOL";
+                initMainLaunchLogic();
+            }
+        });
+
+        function initMainLaunchLogic() {
+            launchBtn.onclick = () => {
+                launchBtn.innerText = "IGNITING...";
+                const args = [];
+                const device = deviceSelect.value;
+                const bitrate = document.getElementById('bitrate').value;
+                const fps = document.getElementById('fps').value;
+                const res = document.getElementById('resolution').value;
+                const alwaysOnTop = document.getElementById('always-on-top').checked;
+                const turnOff = document.getElementById('turn-screen-off').checked;
+                const awake = document.getElementById('stay-awake').checked;
+
+                if (device) args.push('-s', device);
+                if (bitrate) args.push('-b', bitrate);
+                if (fps) args.push('--max-fps', fps);
+                if (res) args.push('-m', res);
+                if (alwaysOnTop) args.push('--always-on-top');
+                if (turnOff) args.push('--turn-screen-off');
+                if (awake) args.push('--stay-awake');
+                args.push('--window-title', 'SHARZO HUD');
+                
+                ipcRenderer.send('launch-sharzo', { args, appPackage: selectedApp });
+            };
+        }
+
+        refreshBtn.addEventListener('click', fetchDevices);
+        initMainLaunchLogic();
+
+        fetchDevices();
+        setInterval(fetchDevices, 10000);
+    </script>
+</body>
+</html>

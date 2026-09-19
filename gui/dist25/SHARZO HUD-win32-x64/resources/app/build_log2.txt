@@ -1,0 +1,2 @@
+EBUSY: resource busy or locked, rmdir 'f:\ANIGRAVITY\SHARZO\gui\dist\SHARZO HUD-win32-x64'
+DONE 

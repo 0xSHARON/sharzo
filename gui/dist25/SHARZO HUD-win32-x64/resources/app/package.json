@@ -1,0 +1,16 @@
+{
+  "name": "sharzo-gui",
+  "version": "1.0.0",
+  "description": "Premium HUD Launcher for SHARZO",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "electron": "^29.4.6",
+    "png-to-ico": "^3.0.1"
+  },
+  "devDependencies": {
+    "electron-packager": "^17.1.2"
+  }
+}
