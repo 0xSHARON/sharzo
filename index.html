@@ -423,7 +423,9 @@
       box-shadow: var(--shadow-lg);
       display: flex;
       flex-direction: column;
-      height: 100%;
+      align-self: center;
+      width: 100%;
+      overflow: hidden;
     }
     [data-theme="dark"] .hero-frame {
       background: #111;
@@ -447,19 +449,21 @@
 
     .frame-body {
       position: relative;
-      flex-grow: 1;
-      background: #000;
+      background: #090a0d;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      min-height: 380px;
+      width: 100%;
+      padding: 8px;
     }
     .frame-body img {
       width: 100%;
-      height: 100%;
-      object-fit: cover;
+      height: auto;
+      max-height: 480px;
+      object-fit: contain;
       display: block;
+      border-radius: 2px;
       transition: transform 0.3s ease;
     }
     .frame-body:hover img {
@@ -569,19 +573,76 @@
       line-height: 1.6;
     }
 
-    .part-card-thumb {
+    .part-card-thumb-frame {
       width: 100%;
-      height: 200px;
-      object-fit: cover;
       border: 2px solid var(--ink);
-      margin-bottom: 20px;
-      background: #000;
+      box-shadow: 4px 4px 0px var(--ink);
+      margin-bottom: 22px;
+      overflow: hidden;
+      background: #090a0d;
+      transition: all 0.2s ease;
+    }
+    [data-theme="dark"] .part-card-thumb-frame {
+      border-color: #333;
+      box-shadow: 4px 4px 0px var(--orange);
+    }
+    .part-thumb-bar {
+      background: var(--ink);
+      color: var(--paper-light);
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .term-dots {
+      display: inline-flex;
+      gap: 5px;
+    }
+    .term-dots i {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      background: #ff5f56;
+    }
+    .term-dots i:nth-child(2) { background: #ffbd2e; }
+    .term-dots i:nth-child(3) { background: #27c93f; }
+    .term-title {
+      color: var(--paper-light);
+      opacity: 0.9;
+      font-family: var(--font-mono);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .part-thumb-content {
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0c0c0e;
+      overflow: hidden;
+      padding: 8px;
+    }
+    .part-thumb-content.cli-bg {
+      background: #0c0c0c;
+      padding: 14px;
+    }
+    .thumb-img-cli {
+      width: 100%;
+      height: auto;
+      max-height: 100%;
+      object-fit: contain;
       display: block;
     }
-    .part-card-thumb.cli-thumb {
+    .thumb-img-hud {
+      width: 100%;
+      height: 100%;
       object-fit: contain;
-      background: #0c0c0c;
-      padding: 12px;
+      display: block;
     }
 
     .spec-list {
@@ -1041,7 +1102,7 @@
   <!-- RUNNING MARQUEE TICKER -->
   <div class="marquee-bar">
     <div class="marquee-inner">
-      ⚡ SHARZO PROTOCOL // PRECISION ANDROID WORKSTATION // SUB-15MS LATENCY // 120 FPS STREAMING READY // CLI CORE + CYBER HUD GUI // ANDROID 5.0 TO 15+ // NO ROOT REQUIRED // FREELANCE STREAMER &amp; ESPORTS SUITE // MAINTAINED BY 0xSHARON // DEVELOPED BY KAJUKATLIii // ⚡ SHARZO PROTOCOL // PRECISION ANDROID WORKSTATION // SUB-15MS LATENCY // 120 FPS STREAMING READY // CLI CORE + CYBER HUD GUI // ANDROID 5.0 TO 15+ // NO ROOT REQUIRED // FREELANCE STREAMER &amp; ESPORTS SUITE // MAINTAINED BY 0xSHARON // DEVELOPED BY KAJUKATLIii //
+      ⚡ SHARZO PROTOCOL // PRECISION ANDROID WORKSTATION // SUB-15MS LATENCY // 120 FPS STREAMING READY // CLI CORE + CYBER HUD GUI // ANDROID 5.0 TO 15+ // NO ROOT REQUIRED // FREELANCE STREAMER &amp; ESPORTS SUITE // DEVELOPED BY 0xSHARON // ⚡ SHARZO PROTOCOL // PRECISION ANDROID WORKSTATION // SUB-15MS LATENCY // 120 FPS STREAMING READY // CLI CORE + CYBER HUD GUI // ANDROID 5.0 TO 15+ // NO ROOT REQUIRED // FREELANCE STREAMER &amp; ESPORTS SUITE // DEVELOPED BY 0xSHARON //
     </div>
   </div>
 
@@ -1157,7 +1218,15 @@
             <p class="part-card-sub">
               Direct standalone binary (<code>sharzo.exe</code>). Zero Electron bloat, instantaneous launch, and raw command-line flag control. Optimal for competitive esports gaming, low-spec hardware, and OBS Window Capture.
             </p>
-            <img src="sharzo.png" alt="SHARZO CLI Terminal Mode" class="part-card-thumb cli-thumb">
+            <div class="part-card-thumb-frame">
+              <div class="part-thumb-bar">
+                <span class="term-dots"><i></i><i></i><i></i></span>
+                <span class="term-title">cmd.exe // sharzo.exe</span>
+              </div>
+              <div class="part-thumb-content cli-bg">
+                <img src="sharzo.png" alt="SHARZO CLI Terminal Mode" class="thumb-img-cli">
+              </div>
+            </div>
             <ul class="spec-list">
               <li><span class="bullet">▶</span> <b>Instant Launch</b>: Double-click <code>sharzo.exe</code></li>
               <li><span class="bullet">▶</span> <b>Ultra-Low Footprint</b>: &lt; 15MB system RAM consumed</li>
@@ -1178,7 +1247,15 @@
             <p class="part-card-sub">
               Futuristic Electron-powered control dashboard (<code>SHARZO HUD.exe</code>) designed for live streamers. Features live ADB device auto-discovery, 1-click Android app launcher, and on-the-fly toggles.
             </p>
-            <img src="sharzohud.jpg" alt="SHARZO HUD GUI Mode" class="part-card-thumb">
+            <div class="part-card-thumb-frame">
+              <div class="part-thumb-bar">
+                <span class="term-dots"><i></i><i></i><i></i></span>
+                <span class="term-title">SHARZO HUD.exe // GUI</span>
+              </div>
+              <div class="part-thumb-content">
+                <img src="sharzohud.jpg" alt="SHARZO HUD GUI Mode" class="thumb-img-hud">
+              </div>
+            </div>
             <ul class="spec-list">
               <li><span class="bullet">▶</span> <b>Cyberpunk HUD UI</b>: Frameless dark streaming overlay</li>
               <li><span class="bullet">▶</span> <b>Auto Device Scan</b>: Detects connected USB &amp; Wi-Fi devices</li>
@@ -1454,7 +1531,7 @@
         </div>
         <div>
           <div class="footer-brand">SHARZO // PRECISION DOMINANCE</div>
-          <div style="margin-top:4px; color:var(--concrete);">Developed by <b>KAJUKATLIii</b> // Maintained by <b>0xSHARON</b></div>
+          <div style="margin-top:4px; color:var(--concrete);">Developed by <b>0xSHARON</b> // Precision Android Dominance</div>
         </div>
       </div>
       <div class="footer-links">
