@@ -213,8 +213,8 @@ sharzo/
 * **Website**: [0xsharon.github.io/sharzo](https://0xsharon.github.io/sharzo/)
 * **Discord Community**: [Join Our Server](https://discord.gg/Vyq2hC6BuN)
 * **GitHub Repository**: [0xSHARON/sharzo](https://github.com/0xSHARON/sharzo)
-* **Original Engine**: KAJUKATLIii
-* **Maintainer**: [0xSHARON](https://github.com/0xSHARON)
+* **Original Engine**:  [0xSHARON](https://github.com/0xSHARON)
+
 
 ---
 
