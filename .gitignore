@@ -12,3 +12,6 @@ gui/*
 gui/dist25/*
 !gui/dist25/SHARZO HUD-win32-x64/
 gui/dist25/SHARZO HUD-win32-x64 - Copy/
+
+# Ignore large uncompressed executable (use SHARZO HUD.zip instead)
+gui/dist25/SHARZO HUD-win32-x64/SHARZO HUD.exe

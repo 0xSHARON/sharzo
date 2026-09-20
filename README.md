@@ -10,7 +10,7 @@
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011%20x64-5865F2?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/0xSHARON/sharzo)
 [![Discord](https://img.shields.io/badge/Community-Join%20Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/Vyq2hC6BuN)
 
-**Developed by KAJUKATLIii // Maintained by [0xSHARON](https://github.com/0xSHARON)**
+**Developed by [0xSHARON](https://github.com/0xSHARON)**
 
 > [!IMPORTANT]
 > 🌐 **Live Website**: [https://0xsharon.github.io/sharzo/](https://0xsharon.github.io/sharzo/)
@@ -107,8 +107,10 @@ You can run SHARZO using either the **Normal CLI** or the **HUD GUI**:
    ```text
    gui\dist25\SHARZO HUD-win32-x64\
    ```
-2. Double-click **`SHARZO HUD.exe`**.
-3. **Using the HUD Dashboard**:
+2. **Extract the Executable**:
+   Right-click **`SHARZO HUD.zip`** and select **Extract All...** (or extract in place) to get **`SHARZO HUD.exe`**.
+3. Double-click **`SHARZO HUD.exe`** to launch!
+4. **Using the HUD Dashboard**:
    * **Device Detection**: Connected ADB devices appear automatically in the dropdown list.
    * **App Launcher**: Scans third-party apps installed on your device. Select any game or app (e.g. Free Fire, PUBG, YouTube) and click to launch it directly on screen.
    * **Preset Controls**: Configure resolution, framerate, and toggles with intuitive sliders.
@@ -188,7 +190,8 @@ sharzo/
 └── gui/                                 # SHARZO HUD GUI Application
     └── dist25/
         └── SHARZO HUD-win32-x64/
-            └── SHARZO HUD.exe           # Standalone Cyberpunk HUD GUI (Electron win32-x64)
+            ├── SHARZO HUD.zip           # Compressed standalone HUD (Unzip to get SHARZO HUD.exe)
+            └── SHARZO HUD.exe           # Standalone Cyberpunk HUD GUI (after unzipping)
 ```
 
 ---
