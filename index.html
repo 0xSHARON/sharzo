@@ -1081,15 +1081,470 @@
       transform: translateY(0);
     }
 
+    /* TABLE RESPONSIVE WRAPPER */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 2px solid var(--ink);
+      box-shadow: var(--shadow-sm);
+    }
+    [data-theme="dark"] .table-responsive {
+      border-color: #2a2a2a;
+    }
+
+    /* MOBILE NAVIGATION TRIGGER & DRAWER */
+    .mobile-nav-actions {
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+    .mobile-menu-btn {
+      background: var(--orange);
+      color: #fff;
+      border: var(--border-w) solid var(--ink);
+      box-shadow: 3px 3px 0px var(--ink);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 900;
+      padding: 8px 14px;
+      cursor: pointer;
+      text-transform: uppercase;
+      user-select: none;
+    }
+    [data-theme="dark"] .mobile-menu-btn {
+      color: #000;
+      box-shadow: 3px 3px 0px var(--orange);
+    }
+    .mobile-menu-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0px var(--ink);
+    }
+
+    .mobile-drawer {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--paper-light);
+      z-index: 99999;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 24px 20px;
+      overflow-y: auto;
+    }
+    [data-theme="dark"] .mobile-drawer {
+      background: #0d0d0e;
+    }
+    .mobile-drawer.open {
+      display: flex;
+    }
+    .mobile-drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 16px;
+      border-bottom: var(--border-w) solid var(--ink);
+    }
+    [data-theme="dark"] .mobile-drawer-header {
+      border-bottom-color: #333;
+    }
+    .mobile-close-btn {
+      background: var(--ink);
+      color: var(--orange);
+      border: 2px solid var(--ink);
+      font-family: var(--font-mono);
+      font-weight: 800;
+      font-size: 0.84rem;
+      padding: 8px 14px;
+      cursor: pointer;
+    }
+    [data-theme="dark"] .mobile-close-btn {
+      background: #1a1a1a;
+      border-color: #333;
+      color: var(--orange);
+    }
+    .mobile-drawer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 28px 0;
+    }
+    .mobile-drawer-links a {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--ink);
+      padding: 12px 16px;
+      background: var(--paper);
+      border: 2px solid var(--ink);
+      box-shadow: 3px 3px 0px var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.1s ease;
+    }
+    [data-theme="dark"] .mobile-drawer-links a {
+      background: #141416;
+      border-color: #2a2a2a;
+      box-shadow: 3px 3px 0px #000;
+      color: #fff;
+    }
+    .mobile-drawer-links a span {
+      color: var(--orange);
+      font-size: 1rem;
+    }
+    .mobile-drawer-links a.drawer-btn-orange {
+      background: var(--orange);
+      color: #fff;
+      border-color: var(--ink);
+      font-size: 1.05rem;
+      margin-top: 6px;
+    }
+    [data-theme="dark"] .mobile-drawer-links a.drawer-btn-orange {
+      color: #000;
+      font-weight: 900;
+    }
+    .mobile-drawer-links a.drawer-btn-dark {
+      background: var(--ink);
+      color: var(--orange);
+      border-color: var(--ink);
+      font-size: 1.05rem;
+    }
+    [data-theme="dark"] .mobile-drawer-links a.drawer-btn-dark {
+      background: #000;
+      border-color: #333;
+    }
+    .mobile-drawer-footer {
+      border-top: 2px dashed var(--concrete);
+      padding-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--concrete-dark);
+      text-transform: uppercase;
+    }
+
+    /* ============================================================
+       RESPONSIVE MOBILE BREAKPOINTS
+       ============================================================ */
     @media (max-width: 980px) {
       .hero {
         grid-template-columns: 1fr;
+        gap: 32px;
       }
       .modes-grid {
         grid-template-columns: 1fr;
+        gap: 24px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      /* Marquee & Header */
+      .marquee-bar {
+        font-size: 0.72rem;
+        padding: 6px 0;
+      }
+      header {
+        top: 29px;
+      }
+      .header-inner {
+        padding: 10px 14px;
+      }
+      .brand-box {
+        font-size: 1.15rem;
+        padding: 4px 10px;
+        gap: 8px;
+      }
+      .brand-box img {
+        width: 28px;
+        height: 28px;
+      }
+      .brand-sub {
+        font-size: 0.65rem;
+      }
+      .desktop-nav {
+        display: none !important;
+      }
+      .mobile-nav-actions {
+        display: flex !important;
+      }
+
+      /* Container */
+      .container {
+        padding: 24px 14px 60px;
+      }
+
+      /* Hero Section */
+      .hero {
+        margin-top: 8px;
+        padding-bottom: 36px;
+      }
+      .hero-title {
+        font-size: clamp(1.9rem, 7.2vw, 3rem);
+        letter-spacing: -1px;
+        margin-bottom: 16px;
+        line-height: 1.05;
+      }
+      .hero-desc {
+        font-size: 0.92rem;
+        line-height: 1.6;
+        padding-left: 14px;
+        margin-bottom: 22px;
+        border-left-width: 4px;
+      }
+      .hero-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+        margin-bottom: 26px;
+      }
+      .hero-actions .btn {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 16px;
+        font-size: 0.8rem;
+      }
+
+      /* Stats Row */
+      .stat-row {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
+      .stat-card {
+        padding: 12px 8px;
+        text-align: center;
+      }
+      .stat-num {
+        font-size: clamp(1.4rem, 4.5vw, 2rem);
+        margin-bottom: 2px;
+      }
+      .stat-label {
+        font-size: 0.62rem;
+        letter-spacing: 0.5px;
+      }
+
+      /* Hero Frame */
+      .hero-frame {
+        box-shadow: var(--shadow-md);
+      }
+      .frame-titlebar {
+        padding: 8px 12px;
+        font-size: 0.7rem;
+      }
+      .frame-status {
+        padding: 8px 12px;
+        font-size: 0.68rem;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      /* Section Headers */
+      .sec-header {
+        margin: 44px 0 20px;
+        padding-bottom: 8px;
+      }
+      .sec-title {
+        font-size: 1.45rem;
+        letter-spacing: -0.5px;
+      }
+      .sec-badge {
+        font-size: 0.65rem;
+        padding: 3px 8px;
+      }
+
+      /* Dual Modes */
+      .part-card {
+        padding: 20px 16px;
+      }
+      .part-card-num {
+        font-size: 2.2rem;
+      }
+      .part-card-title {
+        font-size: 1.3rem;
+      }
+      .part-card-sub {
+        font-size: 0.84rem;
+        margin-bottom: 16px;
+      }
+      .part-thumb-content {
+        height: 170px;
+      }
+      .spec-list {
+        margin-bottom: 20px;
+      }
+      .spec-list li {
+        font-size: 0.78rem;
+        padding: 6px 0;
+      }
+
+      /* Generator Box */
+      .generator-box {
+        padding: 18px 14px;
+      }
+      .gen-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        margin-bottom: 20px;
+      }
+      .param-card {
+        padding: 12px;
+      }
+      .pills-wrap {
+        gap: 6px;
+      }
+      .pill {
+        padding: 6px 10px;
+        font-size: 0.74rem;
+      }
+      .chk-item {
+        font-size: 0.78rem;
+      }
+      .cmd-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        padding: 14px 16px;
+      }
+      .cmd-string {
+        font-size: 0.84rem;
+        word-break: break-all;
+      }
+      .cmd-bar .btn {
+        width: 100%;
+        justify-content: center;
+        padding: 12px;
+      }
+
+      /* ADB Panel */
+      .adb-panel {
+        padding: 16px 12px;
+        margin-top: 30px;
+      }
+      .adb-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+      .adb-status {
+        font-size: 0.78rem;
+      }
+
+      /* Hotkeys */
+      .hotkey-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .hotkey-card {
+        padding: 12px 14px;
+      }
+      .key-badge {
+        font-size: 0.74rem;
+        padding: 4px 8px;
+      }
+      .key-info {
+        font-size: 0.78rem;
+      }
+
+      /* Steps */
+      .steps-grid {
+        grid-template-columns: 1fr;
+        gap: 22px;
+      }
+      .step-card {
+        padding: 24px 16px 18px;
+      }
+      .step-badge {
+        font-size: 1.05rem;
+        padding: 2px 10px;
+        left: 16px;
+        top: -14px;
+      }
+      .step-title {
+        font-size: 1.15rem;
+      }
+      .step-text {
+        font-size: 0.82rem;
+      }
+      .step-snippet {
+        font-size: 0.78rem;
+        padding: 6px 10px;
+      }
+
+      /* CTA */
+      .cta-block {
+        margin-top: 50px;
+        padding: 28px 18px;
+        gap: 20px;
+      }
+      .cta-copy h3 {
+        font-size: 1.8rem;
+      }
+      .cta-copy p {
+        font-size: 0.88rem;
+      }
+      .cta-btns {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+      }
+      .cta-btns .btn {
+        width: 100%;
+        justify-content: center;
+        font-size: 0.82rem !important;
+        padding: 12px 16px !important;
+      }
+
+      /* Footer */
+      footer {
+        padding: 36px 14px 60px;
+      }
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+      }
+      .footer-links {
+        gap: 10px 16px;
+      }
+      .footer-brand {
+        font-size: 1.15rem;
+      }
+
+      /* Toast Msg */
+      #toastMsg {
+        left: 14px;
+        right: 14px;
+        bottom: 14px;
+        font-size: 0.78rem;
+        padding: 10px 14px;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .brand-sub {
+        display: none;
       }
       .stat-row {
         grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .stat-card {
+        padding: 12px 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .stat-num {
+        margin-bottom: 0;
+        font-size: 1.8rem;
+      }
+      .stat-label {
+        font-size: 0.7rem;
+        text-align: right;
       }
     }
   </style>
@@ -1114,10 +1569,11 @@
           <img src="icon.png" alt="SHARZO">
           <span>SHARZO</span>
         </div>
-        <span class="brand-sub">// ANDROID PROTOCOL</span>
+        <span class="brand-sub">// PROTOCOL</span>
       </a>
 
-      <nav class="nav-links">
+      <!-- Desktop Nav Links -->
+      <nav class="nav-links desktop-nav">
         <a href="#modes" class="btn">[MODES]</a>
         <a href="#generator" class="btn">[COMMAND BUILDER]</a>
         <a href="#hotkeys" class="btn">[HOTKEYS]</a>
@@ -1125,8 +1581,37 @@
         <a href="https://github.com/0xSHARON/sharzo" target="_blank" rel="noopener" class="btn btn-orange">[GITHUB REPO]</a>
         <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">[◐ THEME]</button>
       </nav>
+
+      <!-- Mobile Nav Trigger -->
+      <div class="mobile-nav-actions">
+        <button class="theme-toggle" id="themeBtnMobile" onclick="toggleTheme()" title="Toggle Theme">[◐]</button>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileNav()" aria-label="Open Navigation">[☰ MENU]</button>
+      </div>
     </div>
   </header>
+
+  <!-- MOBILE DRAWER OVERLAY -->
+  <div class="mobile-drawer" id="mobileDrawer">
+    <div class="mobile-drawer-header">
+      <div class="brand-box" style="font-size:1.1rem; padding:4px 10px;">
+        <img src="icon.png" alt="SHARZO" style="width:24px; height:24px;">
+        <span>SHARZO // MENU</span>
+      </div>
+      <button class="mobile-close-btn" onclick="toggleMobileNav()" aria-label="Close Navigation">[✕ CLOSE]</button>
+    </div>
+    <div class="mobile-drawer-links">
+      <a href="#modes" onclick="toggleMobileNav()"><span>01.</span> DUAL MODES</a>
+      <a href="#generator" onclick="toggleMobileNav()"><span>02.</span> COMMAND BUILDER</a>
+      <a href="#hotkeys" onclick="toggleMobileNav()"><span>03.</span> HOTKEY MATRIX</a>
+      <a href="#deploy" onclick="toggleMobileNav()"><span>04.</span> RAPID SETUP</a>
+      <a href="https://github.com/0xSHARON/sharzo" target="_blank" rel="noopener" class="drawer-btn-orange">📦 GITHUB REPOSITORY ↗</a>
+      <a href="https://discord.gg/Vyq2hC6BuN" target="_blank" rel="noopener" class="drawer-btn-dark">💬 DISCORD COMMUNITY ↗</a>
+    </div>
+    <div class="mobile-drawer-footer">
+      <span>SHARZO PROTOCOL // WIN64</span>
+      <span>SUB-15MS LATENCY</span>
+    </div>
+  </div>
 
   <main class="container">
 
@@ -1372,26 +1857,28 @@
         </div>
         <div style="font-size:0.75rem; font-weight:800; color:var(--orange);">PROTOCOL: USB 3.0 // PORT: 5037</div>
       </div>
-      <table class="spec-table">
-        <thead>
-          <tr>
-            <th>DEVICE ID</th>
-            <th>STATUS</th>
-            <th>CONNECTED HARDWARE</th>
-            <th>OS PLATFORM</th>
-            <th>INTERACTION</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style="color:var(--orange); font-weight:800;">R58M34ABCDE</td>
-            <td><span style="background:var(--orange); color:#fff; font-weight:900; padding:2px 8px;">AUTHORIZED</span></td>
-            <td>Samsung Galaxy S23 Ultra (SM-S918B)</td>
-            <td>Android 14 (OneUI 6.1)</td>
-            <td><button class="btn" style="padding:4px 10px; font-size:0.72rem;" onclick="testDevicePing()">PING ACK</button></td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-responsive">
+        <table class="spec-table">
+          <thead>
+            <tr>
+              <th>DEVICE ID</th>
+              <th>STATUS</th>
+              <th>CONNECTED HARDWARE</th>
+              <th>OS PLATFORM</th>
+              <th>INTERACTION</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="color:var(--orange); font-weight:800;">R58M34ABCDE</td>
+              <td><span style="background:var(--orange); color:#fff; font-weight:900; padding:2px 8px;">AUTHORIZED</span></td>
+              <td>Samsung Galaxy S23 Ultra (SM-S918B)</td>
+              <td>Android 14 (OneUI 6.1)</td>
+              <td><button class="btn" style="padding:4px 10px; font-size:0.72rem;" onclick="testDevicePing()">PING ACK</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- ============================================================
@@ -1547,6 +2034,28 @@
   <div id="toastMsg">COMMAND COPIED TO CLIPBOARD!</div>
 
   <script>
+    // MOBILE DRAWER CONTROLLER
+    function toggleMobileNav() {
+      const drawer = document.getElementById('mobileDrawer');
+      if (!drawer) return;
+      drawer.classList.toggle('open');
+      if (drawer.classList.contains('open')) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
+      }
+    }
+
+    // Close mobile drawer on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const drawer = document.getElementById('mobileDrawer');
+        if (drawer && drawer.classList.contains('open')) {
+          toggleMobileNav();
+        }
+      }
+    });
+
     // THEME TOGGLE WITH LOCALSTORAGE (Matches cybermanagement)
     function toggleTheme() {
       const html = document.documentElement;
