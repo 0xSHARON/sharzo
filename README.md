@@ -3,6 +3,7 @@
 ![Sharzo Logo](icon.png)
 
 # 🛸 SHARZO
+
 ### Precision Control & Elite Mirroring for Android
 
 [![Website](https://img.shields.io/badge/Website-0xsharon.github.io%2Fsharzo-dfff00?style=for-the-badge&logo=googlechrome&logoColor=black)](https://0xsharon.github.io/sharzo/)
@@ -14,7 +15,7 @@
 
 > [!IMPORTANT]
 > 🌐 **Live Website**: [https://0xsharon.github.io/sharzo/](https://0xsharon.github.io/sharzo/)
-> 
+>
 > **FREE PREMIUM SUPPORT & THEMES**: Contact via Discord at **`kajukatli.`** or join [Our Community Discord](https://discord.gg/Vyq2hC6BuN).
 
 ---
@@ -32,6 +33,7 @@
 **SHARZO** is an ultra-low latency Android mirroring, audio forwarding, and remote-control workstation for Windows 10 & 11. Built for esports gamers, live streamers, content creators, and developers who demand zero bloat and sub-15ms latency.
 
 SHARZO delivers two distinct execution modes:
+
 1. **SHARZO Normal (CLI Core)** (`sharzo.exe`): Raw, zero-overhead standalone binary. Launches in milliseconds, consumes `< 15MB` RAM, and offers full command-line flag customization.
 2. **SHARZO HUD (Cyberpunk GUI)** (`SHARZO HUD.exe`): Modern Electron-powered graphical HUD. Features automated ADB device scanning, one-click Android app launcher, resolution presets, and an always-on-top desktop widget mode.
 
@@ -40,6 +42,7 @@ SHARZO delivers two distinct execution modes:
 ## 📦 Installation & Setup
 
 ### Step 1: Download / Clone the Repository
+
 Clone the repository using Git (or download the ZIP from GitHub):
 
 ```powershell
@@ -68,9 +71,11 @@ cd sharzo
    > *"Allow USB debugging from this computer?"*
 3. Check the box: ☑ **"Always allow from this computer"** and tap **Allow / OK**.
 4. Verify connection by running in terminal:
+
    ```powershell
    .\adb.exe devices
    ```
+
    You should see your device ID with the status `device`.
 
 ---
@@ -83,18 +88,25 @@ You can run SHARZO using either the **Normal CLI** or the **HUD GUI**:
 
 * **Quick Launch**: Double-click **`sharzo.exe`** in the root folder.
 * **Terminal Launch**: Run **`open_a_terminal_here.bat`** or open PowerShell in the project directory:
+
   ```powershell
   .\sharzo.exe
   ```
+
 * **High Refresh Gaming (120 FPS / 1080p / 16Mbps)**:
+
   ```powershell
   .\sharzo.exe -m 1920 --max-fps 120 -b 16M
   ```
+
 * **Mirror with Phone Screen Turned OFF** *(Saves battery & prevents overheating)*:
+
   ```powershell
   .\sharzo.exe --turn-screen-off --stay-awake
   ```
+
 * **Record Device Directly to Video**:
+
   ```powershell
   .\sharzo.exe --record gameplay.mp4
   ```
@@ -104,9 +116,11 @@ You can run SHARZO using either the **Normal CLI** or the **HUD GUI**:
 ### Mode 2: Run SHARZO HUD (Cyberpunk GUI) — *Visual Streamer Dashboard*
 
 1. Open the project folder and navigate to:
+
    ```text
    gui\dist25\SHARZO HUD-win32-x64\
    ```
+
 2. **Extract the Executable**:
    Right-click **`SHARZO HUD.zip`** and select **Extract All...** (or extract in place) to get **`SHARZO HUD.exe`**.
 3. Double-click **`SHARZO HUD.exe`** to launch!
