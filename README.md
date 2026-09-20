@@ -21,7 +21,7 @@
 
 | **SHARZO Normal (CLI Core)** | **SHARZO HUD (Cyberpunk GUI)** |
 | :---: | :---: |
-| ![Sharzo CLI](sharzo.jpg) | ![Sharzo HUD](sharzohud.jpg) |
+| ![Sharzo CLI](sharzo.png) | ![Sharzo HUD](sharzohud.jpg) |
 
 ---
 
