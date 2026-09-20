@@ -175,19 +175,56 @@
     .brand-box {
       background: var(--orange);
       color: #fff;
-      padding: 6px 12px;
+      padding: 6px 14px;
       font-weight: 900;
       font-family: var(--font-display);
-      font-size: 1.25rem;
+      font-size: 1.4rem;
       border: var(--border-w) solid var(--ink);
       box-shadow: 3px 3px 0px var(--ink);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
     .brand-box img {
-      width: 24px;
-      height: 24px;
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+      display: block;
+    }
+    .hero-logo-box {
+      width: 52px;
+      height: 52px;
+      background: var(--paper-light);
+      border: var(--border-w) solid var(--ink);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+    }
+    [data-theme="dark"] .hero-logo-box {
+      background: #111;
+      border-color: #2a2a2a;
+    }
+    .hero-logo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .footer-logo-box {
+      width: 42px;
+      height: 42px;
+      background: #111;
+      border: 2px solid var(--orange);
+      box-shadow: 2px 2px 0px var(--orange);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3px;
+    }
+    .footer-logo-box img {
+      width: 100%;
+      height: 100%;
       object-fit: contain;
     }
     .brand-sub {
@@ -1031,8 +1068,13 @@
          ============================================================ -->
     <section class="hero">
       <div>
-        <div class="hero-tag">
-          ⚡ SYSTEM ARMED // WIN64 PROTOCOL
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom: 20px; flex-wrap: wrap;">
+          <div class="hero-logo-box">
+            <img src="icon.png" alt="SHARZO Logo">
+          </div>
+          <div class="hero-tag" style="margin-bottom:0;">
+            ⚡ SYSTEM ARMED // WIN64 PROTOCOL
+          </div>
         </div>
 
         <h1 class="hero-title">
@@ -1400,9 +1442,14 @@
   <!-- FOOTER -->
   <footer>
     <div class="footer-inner">
-      <div>
-        <div class="footer-brand">SHARZO // PRECISION DOMINANCE</div>
-        <div style="margin-top:6px; color:var(--concrete);">Developed by <b>KAJUKATLIii</b> // Maintained by <b>0xSHARON</b></div>
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div class="footer-logo-box">
+          <img src="icon.png" alt="SHARZO Logo">
+        </div>
+        <div>
+          <div class="footer-brand">SHARZO // PRECISION DOMINANCE</div>
+          <div style="margin-top:4px; color:var(--concrete);">Developed by <b>KAJUKATLIii</b> // Maintained by <b>0xSHARON</b></div>
+        </div>
       </div>
       <div class="footer-links">
         <a href="https://github.com/0xSHARON/sharzo" target="_blank" rel="noopener">GitHub</a>
